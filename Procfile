@@ -1,1 +1,1 @@
-web: java -jar target/my_store_spring-0.0.1-SNAPSHOT.jar
+web: java -jar target/my_store_spring-0.0.1-SNAPSHOT.jar -Dserver.port=$PORT
