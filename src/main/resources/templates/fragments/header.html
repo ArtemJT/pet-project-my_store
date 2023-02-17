@@ -9,36 +9,28 @@
                     <img src="/img/logo_estar.png" alt="My Store">
                 </a>
 
-                <ul class="nav mx-5 my-md-0 justify-content-center">
-                    <li>
-                        <a href="/" class="nav-link text-secondary me-4">
-                            <svg th:insert="fragments/buttons/buttons_svg :: home_btn"
-                                 class="bi d-block mx-auto mb-1" width="24" height="24"></svg>
-                            [[#{header.home}]]
-                        </a>
-                    </li>
-                    <li>
-                        <a href="#" class="nav-link text-white ms-4">
-                            <svg th:insert="fragments/buttons/buttons_svg :: order_btn"
-                                 class="bi d-block mx-auto mb-1" width="24" height="24"></svg>
-                            [[#{header.orders}]]
-                        </a>
-                    </li>
-                    <li>
-                        <a th:href="@{/products}" class="nav-link text-white">
-                            <svg th:insert="fragments/buttons/buttons_svg :: products_btn"
-                                 class="bi d-block mx-auto mb-1" width="24" height="24"></svg>
-                            [[#{header.products}]]
-                        </a>
-                    </li>
-                    <li>
-                        <a sec:authorize="hasAuthority('ADMIN')" href="#" class="nav-link text-white">
-                            <svg th:insert="fragments/buttons/buttons_svg :: customers_btn"
-                                 class="bi d-block mx-auto mb-1" width="24" height="24"></svg>
-                            [[#{header.customers}]]
-                        </a>
-                    </li>
-                </ul>
+                <div class="nav mx-5 my-md-0 justify-content-center">
+                    <a href="/" class="nav-link text-secondary me-4">
+                        <svg th:insert="fragments/buttons/buttons_svg :: home_btn"
+                             class="bi d-block mx-auto mb-1" width="24" height="24"></svg>
+                        [[#{header.home}]]
+                    </a>
+                    <a href="#" class="nav-link text-white ms-4">
+                        <svg th:insert="fragments/buttons/buttons_svg :: order_btn"
+                             class="bi d-block mx-auto mb-1" width="24" height="24"></svg>
+                        [[#{header.orders}]]
+                    </a>
+                    <a th:href="@{/products}" class="nav-link text-white">
+                        <svg th:insert="fragments/buttons/buttons_svg :: products_btn"
+                             class="bi d-block mx-auto mb-1" width="24" height="24"></svg>
+                        [[#{header.products}]]
+                    </a>
+                    <a sec:authorize="hasAuthority('ADMIN')" href="#" class="nav-link text-white">
+                        <svg th:insert="fragments/buttons/buttons_svg :: customers_btn"
+                             class="bi d-block mx-auto mb-1" width="24" height="24"></svg>
+                        [[#{header.customers}]]
+                    </a>
+                </div>
 
                 <a th:href="@{/greeting}" type="button" class="btn btn-success mx-5">
                     <svg th:replace="fragments/buttons/buttons_svg :: cart_btn"></svg>
@@ -51,21 +43,15 @@
                        aria-expanded="false">
                         <img src="/img/icons/translate.svg" width="24" height="24" alt="Language">
                     </a>
-                    <ul class="dropdown-menu text-small shadow" style="">
-                        <li>
-                            <a class="dropdown-item" href="?lang=en">
-                                <img src="/img/icons/gb.svg" width="24" height="24" alt="GB-Flag"> [[#{lang.en}]]
-                            </a>
-                        </li>
-                        <li>
-                            <hr class="dropdown-divider">
-                        </li>
-                        <li>
-                            <a class="dropdown-item" href="?lang=ua">
-                                <img src="/img/icons/ua.svg" width="24" height="24" alt="UA-Flag"> [[#{lang.ua}]]
-                            </a>
-                        </li>
-                    </ul>
+                    <div class="dropdown-menu text-small shadow" style="">
+                        <a class="dropdown-item" href="?lang=en">
+                            <img src="/img/icons/gb.svg" width="24" height="24" alt="GB-Flag"> [[#{lang.en}]]
+                        </a>
+                        <hr class="dropdown-divider">
+                        <a class="dropdown-item" href="?lang=ua">
+                            <img src="/img/icons/ua.svg" width="24" height="24" alt="UA-Flag"> [[#{lang.ua}]]
+                        </a>
+                    </div>
                 </div>
             </div>
         </div>
@@ -88,9 +74,6 @@
                 <a th:href="@{/auth/registration}" type="button" class="btn btn-primary me-4">
                     [[#{header.sing_up}]]
                 </a>
-
-                <!--                <button type="button" class="btn btn-light text-dark me-2">Login</button>-->
-                <!--                <button type="button" class="btn btn-primary">Sign-up</button>-->
             </div>
             <!--            <div sec:authorize="isAuthenticated()" class="flex-shrink-0 dropdown">-->
             <div class="flex-shrink-0 dropdown">
@@ -99,21 +82,15 @@
                     <span class="user-name" sec:authentication="name"></span>
                     <svg th:replace="fragments/buttons/buttons_svg :: user_btn" width="32" height="32"></svg>
                 </a>
-                <ul class="dropdown-menu text-small shadow" style="">
-                    <li>
-                        <a class="dropdown-item" th:href="@{/greeting}">
-                            [[#{header.profile}]]
-                        </a>
-                    </li>
-                    <li>
-                        <hr class="dropdown-divider">
-                    </li>
-                    <li>
-                        <form th:action="@{/logout}" method="post">
-                            <input class="signOut-button" type="submit" th:value="#{header.sign_out}"/>
-                        </form>
-                    </li>
-                </ul>
+                <div class="dropdown-menu text-small shadow" style="">
+                    <a class="dropdown-item" th:href="@{/greeting}">
+                        [[#{header.profile}]]
+                    </a>
+                    <hr class="dropdown-divider">
+                    <form th:action="@{/logout}" method="post">
+                        <input class="signOut-button" type="submit" th:value="#{header.sign_out}"/>
+                    </form>
+                </div>
             </div>
         </div>
     </div>

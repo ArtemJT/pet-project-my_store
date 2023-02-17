@@ -33,8 +33,8 @@ public class AppConfig implements WebMvcConfigurer {
     public LocaleResolver localeResolver() {
         SessionLocaleResolver slr = new SessionLocaleResolver();
 //        slr.setDefaultLocale(new Locale("uk", "UA"));
+//        slr.setDefaultLocale(Locale.US);
         slr.setDefaultLocale(Locale.ENGLISH);
-        slr.setDefaultLocale(Locale.US);
         return slr;
     }
 

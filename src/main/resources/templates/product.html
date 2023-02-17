@@ -118,52 +118,44 @@
 <!--</table>-->
 
 <div class="container my-5">
-    <div class="row row-cols-3 mt-2 mb-2">
-    <div class="col-md-4">
-        <div class="input-group-prepend">
-            <form th:action="@{/products}" id="searchForm">
-                <label for="pageSize">Кількість на сторінці:</label>
-                    <select name="size" th:value="${pageSize}" onchange="changePageSize()" class="size-select"
-                        id="pageSize">
-                    <option th:value="5">5</option>
-                    <option th:value="3">3</option>
-                    <option th:value="6">6</option>
-                    <option th:value="9">9</option>
-                </select>
-                <button type="submit" class="btn btn-secondary btn-sm">Обрати</button>
-            </form>
-        </div>
-    </div>
-        <div class="col-md-3">
-            <select id="sorting" class="form-select form-select-sm">
-                <option hidden selected disabled>[[#{products.sorting}]]</option>
-                <option value="dateAdded">[[#{product.table.date}]]</option>
-                <option value="model">[[#{product.table.model}]]</option>
-                <option value="price">[[#{product.table.price}]]</option>
-            </select>
-        </div>
-        </label>
 
+    <div class="row row-cols-3 mt-2 mb-2">
+        <div class="col-md-1">
+            <div class="btn-group dropend">
+                <button class="btn btn-dark btn-sm dropdown-toggle" type="button" data-bs-toggle="dropdown"
+                        aria-expanded="false">[[${pageSize}]]
+                </button>
+                <div class="dropdown-menu text-small shadow">
+                    <a class="dropdown-item" href="?size=5">5</a>
+                    <a class="dropdown-item" href="?size=10">10</a>
+                    <a class="dropdown-item" href="?size=15">15</a>
+                    <a class="dropdown-item" href="?size=20">20</a>
+                </div>
+            </div>
+        </div>
+        <div class="d-flex col-md-2">
+            <div class="btn-group dropend">
+                <button class="btn btn-dark btn-sm dropdown-toggle" type="button" data-bs-toggle="dropdown"
+                        aria-expanded="false">[[#{product.table.sorting}]]
+                </button>
+                <div class="dropdown-menu text-small shadow">
+                    <a class="dropdown-item" href="?sort=dateAdded">[[#{product.table.date}]]</a>
+                    <a class="dropdown-item" href="?sort=model">[[#{product.table.model}]]</a>
+                    <a class="dropdown-item" href="?sort=price">[[#{product.table.price}]]</a>
+                </div>
+            </div>
+        </div>
     </div>
 
     <table class="table table-hover table-striped table-bordered table-sm">
         <thead>
         <tr>
             <th scope="col">#</th>
-<!--            <th scope="col">-->
-<!--                <a class="button" href="/products?sort=dateAdded">[[#{product.table.date}]] ↓</a>-->
-<!--            </th>-->
-<!--            <th scope="col">-->
-<!--                <a class="button" href="/products?sort=model">Назва ↓</a>-->
-<!--            </th>-->
-<!--            <th scope="col">-->
-<!--                <a class="button" href="/products?sort=price">Ціна ↓</a>-->
-<!--            </th>-->
             <th scope="col">[[#{product.table.date}]]</th>
             <th scope="col">[[#{product.table.model}]]</th>
             <th scope="col">[[#{product.table.price}]]</th>
-            <th scope="col">Од.вим.</th>
-            <th scope="col">Наявність</th>
+            <th scope="col">[[#{product.table.measure}]]</th>
+            <th scope="col">[[#{product.table.status}]]</th>
         </tr>
         </thead>
         <tbody class="table-group-divider">
@@ -182,32 +174,32 @@
         </tbody>
 
     </table>
-        <nav class="pagination-control" aria-label="Pagination" th:if="${totalPages > 0}">
-            <ul class="pagination justify-content-center">
-                <li class="page-item" th:classappend="${currentPage == 1} ? 'disabled'">
-                    <a th:replace="fragments/paging :: paging(1, '<<', 'First Page')"></a>
-                </li>
-                <li class="page-item" th:classappend="${currentPage == 1} ? 'disabled'">
-                    <a th:replace="fragments/paging :: paging(${currentPage - 1}, 'Prev', 'Previous Page')"></a>
-                </li>
-                <li class="page-item disabled" th:if="${currentPage - 2 > 1}">
-                    <a class="page-link" href="#">...</a>
-                </li>
-                <li class="page-item" th:classappend="${page == currentPage} ? 'active'"
-                    th:each="page : ${#numbers.sequence((currentPage > 2 ? currentPage - 2 : 1), (currentPage + 2 < totalPages ? currentPage + 2 : totalPages))}">
-                    <a th:replace="fragments/paging :: paging(${page}, ${page}, 'Page ' + ${page})"></a>
-                </li>
-                <li class="page-item disabled" th:if="${currentPage + 2 < totalPages}">
-                    <a class="page-link" href="#">...</a>
-                </li>
-                <li class="page-item font-weight-bold" th:classappend="${currentPage == totalPages} ? 'disabled'">
-                    <a th:replace="fragments/paging :: paging(${currentPage + 1},'Next', 'Next Page')"></a>
-                </li>
-                <li class="page-item" th:classappend="${currentPage == totalPages} ? 'disabled'">
-                    <a th:replace="fragments/paging :: paging(${totalPages}, '>>', 'Last Page')"></a>
-                </li>
-            </ul>
-        </nav>
+    <nav class="pagination-control" aria-label="Pagination" th:if="${totalPages > 0}">
+        <ul class="pagination justify-content-center">
+            <li class="page-item" th:classappend="${currentPage == 1} ? 'disabled'">
+                <a th:replace="fragments/paging :: paging(1, '<<', 'First Page')"></a>
+            </li>
+            <li class="page-item" th:classappend="${currentPage == 1} ? 'disabled'">
+                <a th:replace="fragments/paging :: paging(${currentPage - 1}, 'Prev', 'Previous Page')"></a>
+            </li>
+            <li class="page-item disabled" th:if="${currentPage - 2 > 1}">
+                <a class="page-link" href="#">...</a>
+            </li>
+            <li class="page-item" th:classappend="${page == currentPage} ? 'active'"
+                th:each="page : ${#numbers.sequence((currentPage > 2 ? currentPage - 2 : 1), (currentPage + 2 < totalPages ? currentPage + 2 : totalPages))}">
+                <a th:replace="fragments/paging :: paging(${page}, ${page}, 'Page ' + ${page})"></a>
+            </li>
+            <li class="page-item disabled" th:if="${currentPage + 2 < totalPages}">
+                <a class="page-link" href="#">...</a>
+            </li>
+            <li class="page-item font-weight-bold" th:classappend="${currentPage == totalPages} ? 'disabled'">
+                <a th:replace="fragments/paging :: paging(${currentPage + 1},'Next', 'Next Page')"></a>
+            </li>
+            <li class="page-item" th:classappend="${currentPage == totalPages} ? 'disabled'">
+                <a th:replace="fragments/paging :: paging(${totalPages}, '>>', 'Last Page')"></a>
+            </li>
+        </ul>
+    </nav>
 </div>
 
 
@@ -245,16 +237,5 @@
 </body>
 <footer th:replace="fragments/footer :: footer_bar"></footer>
 
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js">
-</script>
-<script type="text/javascript">
-    $("#sorting").change(function () {
-        var selectedOption = $('#sorting').val();
-        if (selectedOption !== ''){
-            window.location.replace('products?sort=' + selectedOption);
-        }
-    });
-
-</script>
 
 </html>

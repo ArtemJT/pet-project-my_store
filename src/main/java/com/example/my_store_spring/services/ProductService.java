@@ -27,6 +27,8 @@ public class ProductService {
     private final ProductRepository productRepository;
     private final Mapper mapper;
 
+
+
     public Page<ProductDto> findAll(Pageable pageable) {
         return mapper.mapPageEntityToDto(productRepository.findAll(pageable), ProductDto.class);
     }

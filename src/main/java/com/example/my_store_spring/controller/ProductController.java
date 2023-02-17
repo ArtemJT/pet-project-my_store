@@ -13,14 +13,16 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.FileInputStream;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Properties;
 
 import static com.example.my_store_spring.model.enums.StockStatus.ON_STOCK;
 
 @Controller
-@RequestMapping("/products")
+@RequestMapping("/product")
 @RequiredArgsConstructor
 @Slf4j
 public class ProductController {
@@ -28,28 +30,21 @@ public class ProductController {
     private final ProductService productService;
 
     @GetMapping
-    public String getAll(Model model, @RequestParam(required = false) String sort,
+    public String getAll(Model model, @RequestParam(defaultValue = "dateAdded") String sort,
                          @RequestParam(defaultValue = "1") int page, @RequestParam(defaultValue = "10") int size) {
-        Pageable pageable = sort == null
-                ? PageRequest.of(page - 1, size)
-                : PageRequest.of(page - 1, size, Sort.by(sort));
-
+        Pageable pageable = PageRequest.of(page - 1, size, Sort.by(sort));
         Page<ProductDto> productDtoPage = productService.findAll(pageable);
 
         List<ProductDto> productDtoList = productDtoPage.toList();
-        int currentPage = productDtoPage.getNumber() + 1;
         long totalItems = productDtoPage.getTotalElements();
         int totalPages = productDtoPage.getTotalPages();
-//        log.info("TOTAL ITEMS: {}", totalItems);
-//        log.info("TOTAL PAGES: {}", totalPages);
-//        log.info("CURRENT PAGE: {}", currentPage);
 
         model.addAttribute("allProducts", productDtoList);
         model.addAttribute("currentPage", page);
         model.addAttribute("totalItems", totalItems);
         model.addAttribute("totalPages", totalPages);
         model.addAttribute("pageSize", size);
-        return "products";
+        return "product";
     }
 
 
