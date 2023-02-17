@@ -9,6 +9,9 @@ spring:
       hibernate.default_schema: mjicx0btdgs4w3fi
     show-sql: true
 
+server:
+  port: ${PORT:8080}
+
 #server:
 #  servlet:
 #    session:
