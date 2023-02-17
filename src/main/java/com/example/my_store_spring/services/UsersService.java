@@ -1,11 +1,9 @@
 package com.example.my_store_spring.services;
 
-import com.example.hw_31_spring_security.dto.UserInfoDto;
-import com.example.hw_31_spring_security.model.UserInfo;
-import com.example.hw_31_spring_security.repository.UserInfoRepository;
-import com.example.hw_31_spring_security.utilities.Mapper;
 import com.example.my_store_spring.dto.UsersDto;
-import com.example.my_store_spring.repository.UserInfoRepository;
+import com.example.my_store_spring.model.Users;
+import com.example.my_store_spring.repository.UsersRepository;
+import com.example.my_store_spring.utilities.Mapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -23,25 +21,26 @@ import java.util.stream.StreamSupport;
 @Service
 @Transactional
 @RequiredArgsConstructor
-public class UserInfoService {
+public class UsersService {
 
-    private final UserInfoRepository userInfoRepository;
+    private final UsersRepository usersRepository;
     private final PasswordEncoder passwordEncoder;
+    private final Mapper mapper;
 
     public void createUser(UsersDto usersDto) throws EntityExistsException {
-        UserInfo userInfo = Mapper.toEntity(usersDto, UserInfo.class);
-        userInfo.setPassword(passwordEncoder.encode(usersDto.getPassword()));
-        userInfoRepository.save(userInfo);
-        usersDto.setId(userInfo.getId());
+        Users users = mapper.toEntity(usersDto, Users.class);
+        users.setPassword(passwordEncoder.encode(usersDto.getPassword()));
+        usersRepository.save(users);
+        usersDto.setUserId(users.getUserId());
     }
 
     public List<UsersDto> findAllUsers() {
-        Stream<UserInfo> stream = StreamSupport.stream(userInfoRepository.findAll().spliterator(), false);
-        List<UserInfo> userInfoList = stream.collect(Collectors.toList());
-        return Mapper.allToDto(userInfoList, UsersDto.class);
+        Stream<Users> stream = StreamSupport.stream(usersRepository.findAll().spliterator(), false);
+        List<Users> userInfoList = stream.collect(Collectors.toList());
+        return mapper.collectToDto(userInfoList, UsersDto.class);
     }
 
     public boolean isUserNameExists(String name) {
-        return userInfoRepository.existsUserInfoByName(name);
+        return usersRepository.existsUserInfoByName(name);
     }
 }

@@ -1,19 +1,27 @@
+#Heroku JawsDB:
+spring:
+  datasource:
+    url: jdbc:mysql://aewqksq4uu522fqc:tim5ha4rws3dztiy@ulsq0qqx999wqz84.chr7pe7iynqr.eu-west-1.rds.amazonaws.com:3306/mjicx0btdgs4w3fi
+    username: aewqksq4uu522fqc
+    password: tim5ha4rws3dztiy
+  jpa:
+    properties:
+      hibernate.default_schema: mjicx0btdgs4w3fi
+    show-sql: true
+
+#server:
+#  servlet:
+#    session:
+#      timeout: 30m
+
 #Postgres local db:
 #spring.datasource.url=jdbc:postgresql://localhost:5432/myStoreDB
 #spring.datasource.username=myStoreDB
 #spring.datasource.password=myStoreDB
-#spring.jpa.properties.hibernate.default_schema=my_store_db
 
+#spring.jpa.properties.hibernate.default_schema=my_store_db
 #Heroku ClearDB:
 #spring.datasource.url=jdbc:mysql://eu-cdbr-west-03.cleardb.net:3306/heroku_10bd8c4d6a67e46
 #spring.datasource.username=b380efca398e56
 #spring.datasource.password=ec246ed1
 #spring.jpa.properties.hibernate.default_schema=heroku_10bd8c4d6a67e46
-
-#Heroku JawsDB:
-spring.datasource.url=jdbc:mysql://aewqksq4uu522fqc:tim5ha4rws3dztiy@ulsq0qqx999wqz84.chr7pe7iynqr.eu-west-1.rds.amazonaws.com:3306/mjicx0btdgs4w3fi
-spring.datasource.username=aewqksq4uu522fqc
-spring.datasource.password=tim5ha4rws3dztiy
-spring.jpa.properties.hibernate.default_schema=mjicx0btdgs4w3fi
-
-spring.jpa.show-sql=true

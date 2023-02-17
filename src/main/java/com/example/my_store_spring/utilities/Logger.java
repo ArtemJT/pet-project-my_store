@@ -1,4 +1,4 @@
-package com.example.hw_28_spring_boot_web.utilities;
+package com.example.my_store_spring.utilities;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;

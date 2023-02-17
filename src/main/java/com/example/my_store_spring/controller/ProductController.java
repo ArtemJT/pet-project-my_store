@@ -1,4 +1,4 @@
-package controller;
+package com.example.my_store_spring.controller;
 
 import com.example.my_store_spring.dto.ProductDto;
 import com.example.my_store_spring.model.enums.StockStatus;
@@ -27,9 +27,9 @@ public class ProductController {
 
     private final ProductService productService;
 
-    @GetMapping("pageable")
+    @GetMapping
     public String getAll(Model model, @RequestParam(required = false) String sort,
-                         @RequestParam(defaultValue = "1") int page, @RequestParam(defaultValue = "5") int size) {
+                         @RequestParam(defaultValue = "1") int page, @RequestParam(defaultValue = "10") int size) {
         Pageable pageable = sort == null
                 ? PageRequest.of(page - 1, size)
                 : PageRequest.of(page - 1, size, Sort.by(sort));
@@ -53,13 +53,13 @@ public class ProductController {
     }
 
 
-    @GetMapping
-    public String getAllProducts(Model model) {
-        log.info("products page");
-        List<ProductDto> products = productService.findAllProducts();
-        model.addAttribute("products", products);
-        return "product/products";
-    }
+//    @GetMapping
+//    public String getAllProducts(Model model) {
+//        log.info("products page");
+//        List<ProductDto> products = productService.findAllProducts();
+//        model.addAttribute("products", products);
+//        return "product/products";
+//    }
 
     @GetMapping("addProduct")
     public String addProduct() {
@@ -79,7 +79,7 @@ public class ProductController {
             msg = "Product exists!";
         } else {
             ProductDto productDto =
-                    new ProductDto(null, LocalDateTime.now(), productName, measure, Double.parseDouble(cost), ON_STOCK);
+                    new ProductDto(null, LocalDate.now(), productName, measure, Double.parseDouble(cost), ON_STOCK);
             productService.addProduct(productDto);
             msg = "Product added successfully!";
             model.addAttribute("productDto", productDto);
@@ -88,35 +88,35 @@ public class ProductController {
         return "product/addProduct";
     }
 
-    @PostMapping
-    public String findOrDeleteProduct(@RequestParam String action, Model model,
-                                      @RequestParam(required = false) List<Integer> productId) {
-        log.info("product post page");
-        if (productId == null) {
-            model.addAttribute("message", "Please check product first");
-            return getAllProducts(model);
-        }
-
-        if (action.equals("delete")) {
-            log.info("\"DELETE\" CALLED");
-            return deleteProduct(model, productId);
-        }
-
-        log.info("\"FIND\" CALLED");
-        boolean isDeleted = false;
-        List<ProductDto> productDtoList = productService.findAllById(productId);
-        model.addAttribute("productList", productDtoList);
-        model.addAttribute("deleted", isDeleted);
-        return "product/product";
-    }
-
-    @DeleteMapping
-    public String deleteProduct(Model model, @RequestParam List<Integer> productId) {
-        log.info("product delete page");
-        List<ProductDto> productDtoList = productService.deleteAllById(productId);
-        boolean isDeleted = true;
-        model.addAttribute("productList", productDtoList);
-        model.addAttribute("deleted", isDeleted);
-        return "product/product";
-    }
+//    @PostMapping
+//    public String findOrDeleteProduct(@RequestParam String action, Model model,
+//                                      @RequestParam(required = false) List<Integer> productId) {
+//        log.info("product post page");
+//        if (productId == null) {
+//            model.addAttribute("message", "Please check product first");
+//            return getAllProducts(model);
+//        }
+//
+//        if (action.equals("delete")) {
+//            log.info("\"DELETE\" CALLED");
+//            return deleteProduct(model, productId);
+//        }
+//
+//        log.info("\"FIND\" CALLED");
+//        boolean isDeleted = false;
+//        List<ProductDto> productDtoList = productService.findAllById(productId);
+//        model.addAttribute("productList", productDtoList);
+//        model.addAttribute("deleted", isDeleted);
+//        return "product/product";
+//    }
+//
+//    @DeleteMapping
+//    public String deleteProduct(Model model, @RequestParam List<Integer> productId) {
+//        log.info("product delete page");
+//        List<ProductDto> productDtoList = productService.deleteAllById(productId);
+//        boolean isDeleted = true;
+//        model.addAttribute("productList", productDtoList);
+//        model.addAttribute("deleted", isDeleted);
+//        return "product/product";
+//    }
 }

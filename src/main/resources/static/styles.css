@@ -1,3 +1,50 @@
+header {
+    background-color: #FFFFFF;
+}
+
+.navbar{
+    height: 30px !important;
+}
+
+.dropdown-toggle::after {
+    display: inline-block;
+    margin-left: 0.255em;
+    vertical-align: 0.255em;
+    content: "";
+    border-top: 0.3em solid;
+    border-right: 0.3em solid transparent;
+    border-bottom: 0;
+    border-left: 0.3em solid transparent;
+}
+
+.signOut-button {
+    display: block;
+    width: 100%;
+    padding: 0.25rem 1rem;
+    clear: both;
+    font-weight: 400;
+    color: #212529;
+    text-align: inherit;
+    text-decoration: none;
+    white-space: nowrap;
+    background-color: transparent;
+    border: 0;
+    border-radius: 0.375rem 0;
+}
+
+.signOut-button:hover {
+    color: #212529;
+    background: #f8f9fa;
+}
+
+.form-select-sm example {
+
+}
+.user-name {
+    font-family: DejaVu Sans Mono, monospace;
+    text-transform: capitalize;
+}
+
 .main {
     display: inherit;
     flex-direction: column;
@@ -15,6 +62,45 @@
     margin-top: 5px;
     margin-bottom: 5px;
 }
+
+.pagination-control{
+    margin-left: 84px;
+}
+
+
+.button {
+    color: black;
+    text-decoration: none;
+    /*align-items: center;*/
+    /*background-color: rgba(240, 240, 240, 0.26);*/
+    /*border: 1px solid #DFDFDF;*/
+    /*border-radius: 6px;*/
+    /*box-sizing: border-box;*/
+    /*color: #000000;*/
+    /*cursor: pointer;*/
+    /*font-family: Inter, sans-serif;*/
+    /*font-size: 16px;*/
+    /*font-weight: bold;*/
+    /*justify-content: center;*/
+    /*height: auto;*/
+    /*width: 10px;*/
+    /*margin-left: 30px;*/
+    /*margin-bottom: 5px;*/
+    /*padding: 6px 12px;*/
+    /*display: flex;*/
+    /*line-height: 20px;*/
+    /*max-width: 100%;*/
+    /*text-decoration: none;*/
+    /*transition: all .2s;*/
+    /*user-select: none;*/
+    /*-webkit-user-select: none;*/
+    /*touch-action: manipulation;*/
+}
+
+/*.button:hover {*/
+/*    background-color: #FFFFFF;*/
+/*    border-color: rgba(0, 0, 0, 0.19);*/
+/*}*/
 
 .button-46 {
     /*align-items: center;*/
@@ -60,23 +146,4 @@
 /*    }*/
 /*}*/
 
-.product_table {
-    margin-left: 30px;
-    margin-bottom: 5px;
-    width: 90%;
-    border: 3px ridge;
-}
-
-.product_table th {
-    border: 1px solid;
-    font-weight: normal;
-}
-
-.product_table tr:nth-child(even) {
-    background-color: #efefef;
-}
-
-.product_table tr:hover {
-    background-color: bisque;
-}
 

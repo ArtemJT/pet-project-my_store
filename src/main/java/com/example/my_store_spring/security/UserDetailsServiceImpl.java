@@ -1,7 +1,7 @@
-package com.example.hw_31_spring_security.security;
+package com.example.my_store_spring.security;
 
-import com.example.hw_31_spring_security.model.UserInfo;
-import com.example.hw_31_spring_security.repository.UserInfoRepository;
+import com.example.my_store_spring.model.Users;
+import com.example.my_store_spring.repository.UsersRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -19,16 +19,16 @@ import java.util.Set;
 @RequiredArgsConstructor
 public class UserDetailsServiceImpl implements UserDetailsService {
 
-    private final UserInfoRepository userInfoRepository;
+    private final UsersRepository usersRepository;
 
     @Override
     public UserDetails loadUserByUsername(String userName)
             throws UsernameNotFoundException {
-        UserInfo userInfo = userInfoRepository.findUserInfoByName(userName).orElseThrow(EntityNotFoundException::new);
+        Users users = usersRepository.findUserInfoByName(userName).orElseThrow(EntityNotFoundException::new);
 
         Set<GrantedAuthority> roles = new HashSet<>();
-        roles.add(new SimpleGrantedAuthority(userInfo.getRole().name()));
+        roles.add(new SimpleGrantedAuthority(users.getRole().name()));
 
-        return new User(userInfo.getName(), userInfo.getPassword(), roles);
+        return new User(users.getName(), users.getPassword(), roles);
     }
 }

@@ -7,7 +7,7 @@
 <body>
 
 <a th:fragment="paging(pageNum, label, tooltip)" class="page-link"
-   th:href="@{'/tutorials?' + ${keyword!=null && keyword!=''? 'keyword=' + keyword + '&' : ''} + 'page=' + ${pageNum} + '&size=' + ${pageSize}}"
+   th:href="@{'/products?' + ${sort!=null && sort!=''? 'sort=' + sort + '&' : ''} + 'page=' + ${pageNum} + '&size=' + ${pageSize}}"
    th:title="${tooltip}" rel="tooltip">
     [[${label}]]
 </a>

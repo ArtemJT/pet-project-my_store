@@ -1,14 +1,195 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org"
-      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
-<body>
-<header th:fragment="header">
-    <div class="hello_user">
-        <h1>Hello, <span sec:authentication="name"></span></h1>
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<header th:fragment="header_bar" class="sticky-top">
+    <div class="px-3 text-bg-dark">
+        <div class="container-fluid">
+            <div class="d-flex flex-wrap align-items-center justify-content-lg-between">
+                <a class="navbar-brand me-5" href="/">
+                    <img src="/img/logo_estar.png" alt="My Store">
+                </a>
+
+                <ul class="nav mx-5 my-md-0 justify-content-center">
+                    <li>
+                        <a href="/" class="nav-link text-secondary me-4">
+                            <svg th:insert="fragments/buttons/buttons_svg :: home_btn"
+                                 class="bi d-block mx-auto mb-1" width="24" height="24"></svg>
+                            [[#{header.home}]]
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" class="nav-link text-white ms-4">
+                            <svg th:insert="fragments/buttons/buttons_svg :: order_btn"
+                                 class="bi d-block mx-auto mb-1" width="24" height="24"></svg>
+                            [[#{header.orders}]]
+                        </a>
+                    </li>
+                    <li>
+                        <a th:href="@{/products}" class="nav-link text-white">
+                            <svg th:insert="fragments/buttons/buttons_svg :: products_btn"
+                                 class="bi d-block mx-auto mb-1" width="24" height="24"></svg>
+                            [[#{header.products}]]
+                        </a>
+                    </li>
+                    <li>
+                        <a sec:authorize="hasAuthority('ADMIN')" href="#" class="nav-link text-white">
+                            <svg th:insert="fragments/buttons/buttons_svg :: customers_btn"
+                                 class="bi d-block mx-auto mb-1" width="24" height="24"></svg>
+                            [[#{header.customers}]]
+                        </a>
+                    </li>
+                </ul>
+
+                <a th:href="@{/greeting}" type="button" class="btn btn-success mx-5">
+                    <svg th:replace="fragments/buttons/buttons_svg :: cart_btn"></svg>
+                    [[#{header.cart}]]
+                </a>
+
+                <div class="dropdown ms-5">
+                    <a class="d-block link-light text-decoration-none dropdown-toggle" role="button"
+                       data-bs-toggle="dropdown"
+                       aria-expanded="false">
+                        <img src="/img/icons/translate.svg" width="24" height="24" alt="Language">
+                    </a>
+                    <ul class="dropdown-menu text-small shadow" style="">
+                        <li>
+                            <a class="dropdown-item" href="?lang=en">
+                                <img src="/img/icons/gb.svg" width="24" height="24" alt="GB-Flag"> [[#{lang.en}]]
+                            </a>
+                        </li>
+                        <li>
+                            <hr class="dropdown-divider">
+                        </li>
+                        <li>
+                            <a class="dropdown-item" href="?lang=ua">
+                                <img src="/img/icons/ua.svg" width="24" height="24" alt="UA-Flag"> [[#{lang.ua}]]
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
     </div>
-    <form th:action="@{/logout}" method="post">
-        <input type="submit" value="Sign Out"/>
-    </form>
+    <div class="px-3 py-2 border-bottom mb-3">
+        <div class="container-fluid d-flex flex-wrap justify-content-center">
+            <form class="col-12 col-lg-auto mb-2 mb-lg-0 me-lg-auto d-flex" role="search">
+                <input type="search" class="form-control me-2" th:placeholder="#{header.search.inline}"
+                       aria-label="Search">
+                <button class="btn btn-outline-success" type="submit">
+                    [[#{header.search}]]
+                </button>
+            </form>
+
+            <!-- Authentication -->
+            <div sec:authorize="isAnonymous()" class="text-end">
+                <a th:href="@{/auth/login}" type="button" class="btn btn-light text-dark me-2">
+                    [[#{header.login}]]
+                </a>
+                <a th:href="@{/auth/registration}" type="button" class="btn btn-primary me-4">
+                    [[#{header.sing_up}]]
+                </a>
+
+                <!--                <button type="button" class="btn btn-light text-dark me-2">Login</button>-->
+                <!--                <button type="button" class="btn btn-primary">Sign-up</button>-->
+            </div>
+            <!--            <div sec:authorize="isAuthenticated()" class="flex-shrink-0 dropdown">-->
+            <div class="flex-shrink-0 dropdown">
+                <a href="#" class="d-block link-dark text-decoration-none dropdown-toggle" data-bs-toggle="dropdown"
+                   aria-expanded="false">
+                    <span class="user-name" sec:authentication="name"></span>
+                    <svg th:replace="fragments/buttons/buttons_svg :: user_btn" width="32" height="32"></svg>
+                </a>
+                <ul class="dropdown-menu text-small shadow" style="">
+                    <li>
+                        <a class="dropdown-item" th:href="@{/greeting}">
+                            [[#{header.profile}]]
+                        </a>
+                    </li>
+                    <li>
+                        <hr class="dropdown-divider">
+                    </li>
+                    <li>
+                        <form th:action="@{/logout}" method="post">
+                            <input class="signOut-button" type="submit" th:value="#{header.sign_out}"/>
+                        </form>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
 </header>
-</body>
+
+<!--<header th:fragment="header_bar">-->
+<!--    <nav class="navbar sticky-top navbar-expand-lg bg-body-tertiary">-->
+<!--        <div class="container-fluid">-->
+<!--            <a class="navbar-brand" href="/">-->
+<!--                <img src="/img/logo_estar.png" alt="My Store">-->
+<!--            </a>-->
+<!--            <button class="navbar-toggler" type="button" data-bs-toggle="collapse"-->
+<!--                    data-bs-target="#navbarSupportedContent"-->
+<!--                    aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">-->
+<!--                <span class="navbar-toggler-icon"></span>-->
+<!--            </button>-->
+<!--            <div class="collapse navbar-collapse" id="navbarSupportedContent">-->
+<!--                <ul class="navbar-nav me-auto mb-2 mb-lg-0">-->
+<!--                    <li class="nav-item">-->
+<!--                        <a class="nav-link active" aria-current="page" th:href="@{/greeting}">Hello Page</a>-->
+<!--                    </li>-->
+<!--                    <li class="nav-item">-->
+<!--                        <a class="nav-link" href="/products">Products</a>-->
+<!--                    </li>-->
+<!--                    <li class="nav-item">-->
+<!--                        <a class="nav-link" href="/form">Login</a>-->
+<!--                    </li>-->
+<!--                    <li class="nav-item">-->
+<!--                        <a class="nav-link disabled">Disabled</a>-->
+<!--                    </li>-->
+<!--                    <li class="nav-item dropdown">-->
+<!--                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"-->
+<!--                           aria-expanded="false">-->
+<!--                            Dropdown-->
+<!--                        </a>-->
+<!--                        <ul class="dropdown-menu">-->
+<!--                            <li><a class="dropdown-item" href="#">Action</a></li>-->
+<!--                            <li><a class="dropdown-item" href="#">Another action</a></li>-->
+<!--                            <li>-->
+<!--                                <hr class="dropdown-divider">-->
+<!--                            </li>-->
+<!--                            <li><a class="dropdown-item" href="#">Something else here</a></li>-->
+<!--                        </ul>-->
+<!--                    </li>-->
+<!--                </ul>-->
+
+<!--                &lt;!&ndash; Right elements &ndash;&gt;-->
+<!--                <div class="d-flex align-items-center">-->
+<!--                    &lt;!&ndash; Authentication &ndash;&gt;-->
+<!--                    <button type="button" class="btn btn-link px-3 me-2">-->
+<!--                        Sing In-->
+<!--                    </button>-->
+<!--                    <button type="button" class="btn btn-primary me-3">-->
+<!--                        Sign Up-->
+<!--                    </button>-->
+<!--                    <div class="dropdown">-->
+<!--                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"-->
+<!--                           aria-expanded="false">-->
+<!--                            USERNAME-->
+<!--                        </a>-->
+<!--                        <ul-->
+<!--                                class="dropdown-menu dropdown-menu-end"-->
+<!--                                aria-labelledby="navbarDropdownMenuAvatar"-->
+<!--                        >-->
+<!--                            <li>-->
+<!--                                <a class="dropdown-item" href="#">My profile</a>-->
+<!--                            </li>-->
+<!--                            <li>-->
+<!--                                <a class="dropdown-item" href="#">Logout</a>-->
+<!--                            </li>-->
+<!--                        </ul>-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--                &lt;!&ndash; Right elements &ndash;&gt;-->
+<!--            </div>-->
+<!--        </div>-->
+<!--    </nav>-->
+<!--</header>-->
 </html>

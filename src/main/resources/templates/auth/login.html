@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org">
-<head>
-    <link th:href="@{/styles.css}" rel="stylesheet"/>
+<head th:replace="fragments/common :: common_header(~{::title}, _)">
     <title>LogIn</title>
 </head>
+<header th:replace="fragments/header :: header_bar"></header>
 <body>
 <div class="box">
     <h3>Sign In or Register first</h3>
@@ -15,7 +15,14 @@
 <div th:if="${param.logout}">
     You have been logged out.
 </div>
-<div th:replace="fragments/login-form :: login_form('login', 'Sign In')"></div>
-<footer th:insert="fragments/footer :: footer"></footer>
+<form th:action="@{/auth/login}" method="post">
+    <div class="login_form">
+        <div><label> Login : <input type="text" name="username"/> </label></div>
+        <div><label> Password: <input type="password" name="password"/> </label></div>
+        <div><input type="submit" value="Sign In"/></div>
+    </div>
+</form>
+
 </body>
+<footer th:replace="fragments/footer :: footer_bar"></footer>
 </html>
