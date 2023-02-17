@@ -15,11 +15,11 @@
     <description>my_store_spring</description>
     <properties>
         <java.version>11</java.version>
-        <!--        for Heroku-->
-<!--        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>-->
-<!--        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>-->
-<!--        <maven.compiler.source>11</maven.compiler.source>-->
-<!--        <maven.compiler.target>11</maven.compiler.target>-->
+<!--                for Heroku-->
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+        <maven.compiler.source>11</maven.compiler.source>
+        <maven.compiler.target>11</maven.compiler.target>
         <!--        -->
     </properties>
     <dependencies>
@@ -117,21 +117,21 @@
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <!--        for Heroku-->
-<!--                <executions>-->
-<!--                    <execution>-->
-<!--                        <goals>-->
-<!--                            <goal>build-info</goal>-->
-<!--                        </goals>-->
-<!--                        <configuration>-->
-<!--                            <additionalProperties>-->
-<!--                                <encoding.source>${project.build.sourceEncoding}</encoding.source>-->
-<!--                                <encoding.reporting>${project.reporting.outputEncoding}</encoding.reporting>-->
-<!--                                <java.source>${maven.compiler.source}</java.source>-->
-<!--                                <java.target>${maven.compiler.target}</java.target>-->
-<!--                            </additionalProperties>-->
-<!--                        </configuration>-->
-<!--                    </execution>-->
-<!--                </executions>-->
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>build-info</goal>
+                        </goals>
+                        <configuration>
+                            <additionalProperties>
+                                <encoding.source>${project.build.sourceEncoding}</encoding.source>
+                                <encoding.reporting>${project.reporting.outputEncoding}</encoding.reporting>
+                                <java.source>${maven.compiler.source}</java.source>
+                                <java.target>${maven.compiler.target}</java.target>
+                            </additionalProperties>
+                        </configuration>
+                    </execution>
+                </executions>
                 <!--        -->
                 <configuration>
                     <excludes>
