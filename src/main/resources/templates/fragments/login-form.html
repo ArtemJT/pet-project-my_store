@@ -1,0 +1,12 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org">
+<body>
+<form th:fragment="login_form(action, value)" th:action="${action}" method="post">
+    <div class="login_form">
+        <div><label> Login : <input type="text" name="username"/> </label></div>
+        <div><label> Password: <input type="password" name="password"/> </label></div>
+        <div><input type="submit" th:value="${value}"/></div>
+    </div>
+</form>
+</body>
+</html>

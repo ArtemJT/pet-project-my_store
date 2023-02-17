@@ -1,0 +1,50 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Products</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <link
+            href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap"
+            rel="stylesheet"
+    />
+    <link rel="stylesheet" href="styles.css"/>
+</head>
+<body>
+<div>
+    <h1 style="background-color: fuchsia">
+        ТАБЛИЦЯ ПРОДУКТІВ
+    </h1>
+</div>
+<div>
+    <table class="product_table"></table>
+    <tr th:each="prod: ${allProducts}">
+        <td th:text="allProudcts.name">name</td>
+    </tr>
+</div>
+<!--<div>-->
+<!--    <table class="product_table" thy:text="${product}">-->
+<!--        <caption>Всі продукти</caption>-->
+<!--        <tr>-->
+<!--            <td>-->
+<!--                Дата створення-->
+<!--            </td>-->
+<!--            <td>-->
+<!--                Назва-->
+<!--            </td>-->
+<!--            <td>-->
+<!--                Од.вим.-->
+<!--            </td>-->
+<!--            <td>-->
+<!--                Ціна (USD)-->
+<!--            </td>-->
+<!--        </tr>-->
+<!--        <tr thy:each="prod: ${allProducts}">-->
+<!--            <td thy:date="allProducts.creationDate"></td>-->
+<!--            <td thy:text="allProducts.name"></td>-->
+<!--            <td thy:text="allProducts.measure"></td>-->
+<!--            <td thy:number="allProducts.price"></td>-->
+<!--        </tr>-->
+<!--    </table>-->
+<!--</div>-->
+</body>
+</html>

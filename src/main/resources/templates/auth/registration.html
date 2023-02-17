@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org">
+<head>
+    <link th:href="@{/styles.css}" rel="stylesheet"/>
+    <title>SignUp</title>
+</head>
+<body>
+<h2>Add new user</h2>
+<div th:insert="fragments/message :: message"></div>
+
+<div th:replace="fragments/login-form :: login_form('registration', 'Sign Up')"></div>
+<footer th:insert="fragments/footer :: footer"></footer>
+</body>
+</html>

@@ -1,0 +1,1 @@
+web: java -jar target/my_test_app-0.0.1-SNAPSHOT.jar

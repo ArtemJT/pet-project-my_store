@@ -1,0 +1,59 @@
+<!DOCTYPE HTML>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <link th:href="@{/styles.css}" rel="stylesheet"/>
+    <title>Product</title>
+</head>
+<body>
+<div th:replace="fragments/header :: header"></div>
+
+<div th:insert="fragments/message :: message"></div>
+
+<div sec:authorize="hasAuthority('ADMIN')">
+    <a class="href_button" th:href="@{/products/addProduct}">Add product</a>
+</div>
+
+<div class="products_form">
+    <form th:action="@{/products}" method="post">
+        <table class="table">
+            <thead>
+            <tr>
+                <th scope="col">
+                    <label>
+                    <input type="checkbox" name="checkAll" onclick="toggle(this)"/>Select all
+                </label>
+                </th>
+                <th scope="col">Name</th>
+                <th scope="col">Cost</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="product: ${products}">
+                <td>
+                    <label>
+                        <input type="checkbox" name="productId" th:value="${product.id}"/>
+                    </label>
+                </td>
+                <td>[[${product.name}]]</td>
+                <td>[[${product.cost}]]</td>
+            </tr>
+            </tbody>
+        </table>
+        <label class="href_button"><input hidden type="submit" name="action" value="find"/>Details</label>
+        <label sec:authorize="hasAuthority('ADMIN')" class="href_button">
+            <input hidden type="submit" name="action" value="delete"/>Delete</label>
+    </form>
+</div>
+
+<footer th:insert="fragments/footer :: footer"></footer>
+</body>
+<script>
+    function toggle(source) {
+        checkboxes = document.getElementsByName('productId');
+        for(var i=0, n=checkboxes.length;i<n;i++) {
+            checkboxes[i].checked = source.checked;
+        }
+    }
+</script>
+</html>

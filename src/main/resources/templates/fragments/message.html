@@ -1,0 +1,8 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<body>
+<div th:fragment="message" th:if="${message != null}">
+    <h4 th:text="${message}"></h4>
+</div>
+</body>
+</html>

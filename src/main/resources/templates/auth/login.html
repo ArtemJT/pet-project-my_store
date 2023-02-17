@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org">
+<head>
+    <link th:href="@{/styles.css}" rel="stylesheet"/>
+    <title>LogIn</title>
+</head>
+<body>
+<div class="box">
+    <h3>Sign In or Register first</h3>
+    <a th:replace="fragments/buttons/registration_btn :: rgstr_btn"></a>
+</div>
+<div th:if="${param.error}">
+    Invalid username and password.
+</div>
+<div th:if="${param.logout}">
+    You have been logged out.
+</div>
+<div th:replace="fragments/login-form :: login_form('login', 'Sign In')"></div>
+<footer th:insert="fragments/footer :: footer"></footer>
+</body>
+</html>

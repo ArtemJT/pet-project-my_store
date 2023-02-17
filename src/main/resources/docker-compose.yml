@@ -1,0 +1,12 @@
+version: '3.3'
+
+services:
+  postgres_myStoreDB:
+    image: postgres:14.6
+    restart: always
+    environment:
+      POSTGRES_DB: myStoreDB
+      POSTGRES_PASSWORD: myStoreDB
+      POSTGRES_USER: myStoreDB
+    ports:
+      - "5432:5432"
