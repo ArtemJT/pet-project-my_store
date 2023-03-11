@@ -1,8 +1,10 @@
-PROJECT DESCRIPTION
+## **Internet-shop**	
 
-The task of the final project is to develop a web application that supports the functionality according to the task variant.
+The following technologies were used: 
 
-### **Internet-shop**	
+      Spring Boot, Spring Security, Hibernate, Flyway, Thymeleaf
+
+[//]: # (### The app is available at the link: https://my-pet-app.herokuapp.com/)
 
 The store has a catalog of goods for which you need to realize the opportunity to:
 - sort by product name (az, za);
@@ -10,9 +12,12 @@ The store has a catalog of goods for which you need to realize the opportunity t
 - sorting goods by novelty;
 - sample of goods by parameters (category, price range, color, size, etc.)
 
-  - The user browses the catalog and can add items to their cart. After adding the goods to the cart, the registered user can place an order. This option is not available for an unregistered user. After placing an order, it (order) recieve the status 'registered'.
-  - The user has a personal account where he can view his orders.
-  - The system administrator has the rights:
-- adding / removing goods, changing product information;
-- blocking / unblocking- the user;
-- transfering order from 'registered' to 'paid' or 'canceled'.
+
+- The user browses the catalog and can add items to their cart. After adding the goods to the cart, the registered user can place an order. This option is not available for an unregistered user. After placing an order, it (order) recieve the status 'registered'.
+- The user has a personal account where he can view his orders.
+
+
+- The system administrator has the rights:
+  - adding / removing goods, changing product information;
+  - blocking / unblocking- the user;
+  - transfering order from 'registered' to 'paid' or 'canceled'.

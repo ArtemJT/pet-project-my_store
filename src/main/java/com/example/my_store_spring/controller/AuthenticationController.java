@@ -1,21 +1,17 @@
 package com.example.my_store_spring.controller;
 
 import com.example.my_store_spring.dto.UsersDto;
-import com.example.my_store_spring.model.enums.UserRole;
+import com.example.my_store_spring.enums.UserRole;
+import com.example.my_store_spring.enums.UserStatus;
+import com.example.my_store_spring.security.UserDetailsServiceImpl;
 import com.example.my_store_spring.services.UsersService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpHeaders;
-import org.springframework.security.web.header.Header;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.function.ServerRequest;
 
-import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDateTime;
-import java.util.List;
-import java.util.Map;
 
 @Controller
 @RequiredArgsConstructor
@@ -24,10 +20,12 @@ import java.util.Map;
 public class AuthenticationController {
 
     private final UsersService usersService;
+    private final UserDetailsServiceImpl userDetailsService;
 
     @GetMapping("login")
-    public String login() {
+    public String login(Model model) {
         log.info("Login page");
+        model.addAttribute("isBlocked", userDetailsService.isBlocked());
         return "auth/login";
     }
 
@@ -46,20 +44,33 @@ public class AuthenticationController {
     @PostMapping("registration")
     public String signUp(@RequestParam String username,
                          @RequestParam String password,
-                         @RequestParam String email, Model model) {
+                         @RequestParam String passwordRepeat,
+                         @RequestParam String email,
+                         @RequestParam(required = false) String termsAgree, Model model) {
         log.info("registration post page");
         String msg = null;
         if (username.equals("") || password.equals("") || email.equals("")) {
-            msg = "Username and password must be filled";
+            msg = "must_filled";
         } else if (usersService.isUserNameExists(username)) {
-            msg = "User exists!";
+            msg = "exists";
+        } else if (!password.equals(passwordRepeat)) {
+            msg = "pass_mismatch";
+        } else if (termsAgree == null) {
+            msg = "agree";
         }
         if (msg != null) {
             model.addAttribute("message", msg);
             return "auth/registration";
         }
-        UsersDto userInfoDto = new UsersDto(null, LocalDateTime.now(), username, password, email, UserRole.USER);
-        usersService.createUser(userInfoDto);
+        UsersDto usersDto = new UsersDto();
+        usersDto.setDateAdded(LocalDateTime.now());
+        usersDto.setName(username);
+        usersDto.setPassword(password);
+        usersDto.setEmail(email);
+        usersDto.setRole(UserRole.USER);
+        usersDto.setStatus(UserStatus.UNBLOCKED);
+
+        usersService.createUser(usersDto);
         return "redirect:/auth/login";
     }
 }

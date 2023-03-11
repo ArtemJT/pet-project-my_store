@@ -1,17 +1,19 @@
 package com.example.my_store_spring.model;
 
-import com.example.my_store_spring.model.enums.UserRole;
+import com.example.my_store_spring.enums.UserRole;
+import com.example.my_store_spring.enums.UserStatus;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Getter
 @Setter
 @NoArgsConstructor
-@Entity(name = "user")
+@Entity(name = "users")
 public class Users {
 
     @Id
@@ -32,6 +34,12 @@ public class Users {
 
     @Enumerated(EnumType.STRING)
     private UserRole role;
+
+    @Enumerated(EnumType.STRING)
+    private UserStatus status;
+
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
+    private List<Order> orderList;
 }
 
 

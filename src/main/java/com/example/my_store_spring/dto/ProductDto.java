@@ -1,12 +1,15 @@
 package com.example.my_store_spring.dto;
 
-import com.example.my_store_spring.model.enums.StockStatus;
+import com.example.my_store_spring.model.Category;
+import com.example.my_store_spring.model.ProductDetails;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.SneakyThrows;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 
 @Data
 @NoArgsConstructor
@@ -15,13 +18,17 @@ public class ProductDto {
 
     private Integer productId;
 
-    private LocalDate dateAdded;
-
     private String model;
 
-    private String measure;
+    private BigDecimal price;
 
-    private double price;
+    private LocalDate dateAdded;
 
-    private StockStatus stockStatus;
+    private String image;
+
+    private StockStatusDto stockStatusDto;
+
+    private CategoryDto categoryDto;
+
+    private ProductDetailsDto productDetailsDto;
 }

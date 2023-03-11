@@ -1,99 +1,132 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org"
-      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security" xmlns="http://www.w3.org/1999/html">
 <header th:fragment="header_bar" class="sticky-top">
     <div class="px-3 text-bg-dark">
         <div class="container-fluid">
             <div class="d-flex flex-wrap align-items-center justify-content-lg-between">
-                <a class="navbar-brand me-5" href="/">
+                <a class="navbar-brand me-3" href="/">
                     <img src="/img/logo_estar.png" alt="My Store">
                 </a>
 
-                <div class="nav mx-5 my-md-0 justify-content-center">
-                    <a href="/" class="nav-link text-secondary me-4">
-                        <svg th:insert="fragments/buttons/buttons_svg :: home_btn"
+                <div class="nav mx-3 my-md-0 justify-content-center">
+                    <a href="/" class="nav-link text-secondary">
+                        <svg th:insert="fragments/icons_svg :: home_btn"
                              class="bi d-block mx-auto mb-1" width="24" height="24"></svg>
                         [[#{header.home}]]
                     </a>
-                    <a href="#" class="nav-link text-white ms-4">
-                        <svg th:insert="fragments/buttons/buttons_svg :: order_btn"
-                             class="bi d-block mx-auto mb-1" width="24" height="24"></svg>
-                        [[#{header.orders}]]
-                    </a>
-                    <a th:href="@{/product}" class="nav-link text-white">
-                        <svg th:insert="fragments/buttons/buttons_svg :: products_btn"
+                    <a th:href="@{/products}" class="nav-link text-white">
+                        <svg th:insert="fragments/icons_svg :: products_btn"
                              class="bi d-block mx-auto mb-1" width="24" height="24"></svg>
                         [[#{header.products}]]
                     </a>
-                    <a sec:authorize="hasAuthority('ADMIN')" href="#" class="nav-link text-white">
-                        <svg th:insert="fragments/buttons/buttons_svg :: customers_btn"
+                    <a sec:authorize="hasAuthority('USER')" th:href="@{/orders}" class="nav-link text-white">
+                        <svg th:insert="fragments/icons_svg :: order_btn"
+                             class="bi d-block mx-auto mb-1" width="24" height="24"></svg>
+                        [[#{header.orders}]]
+                    </a>
+                    <a sec:authorize="hasAuthority('ADMIN')" th:href="@{/customers}" class="nav-link text-white">
+                        <svg th:insert="fragments/icons_svg :: customers_btn"
                              class="bi d-block mx-auto mb-1" width="24" height="24"></svg>
                         [[#{header.customers}]]
                     </a>
                 </div>
 
-                <a th:href="@{/greeting}" type="button" class="btn btn-success mx-5">
-                    <svg th:replace="fragments/buttons/buttons_svg :: cart_btn"></svg>
+                <div class="d-flex flex-wrap justify-content-center">
+                    <!-- Authentication -->
+                    <div sec:authorize="isAnonymous()" class="text-end mx-2">
+                        <a th:href="@{/auth/login}" type="button" class="btn btn-light text-dark">
+                            [[#{header.login}]]
+                        </a>
+                        <a th:href="@{/auth/registration}" type="button" class="btn btn-primary">
+                            [[#{header.sing_up}]]
+                        </a>
+                    </div>
+                    <div sec:authorize="isAuthenticated()" class="flex-shrink-0 dropdown mx-2">
+                        <a href="#" class="d-block link-dark text-decoration-none dropdown-toggle"
+                           data-bs-toggle="dropdown"
+                           aria-expanded="false">
+                            <span class="user-name" sec:authentication="name"></span>
+<!--                            <img src="/img/icons/user_btn.svg" alt="User">-->
+                            <svg th:replace="fragments/icons_svg :: user_btn"/>
+                        </a>
+                        <div class="dropdown-menu text-small shadow" style="">
+                            <a class="dropdown-item" th:href="@{/greeting}">
+                                [[#{header.profile}]]
+                            </a>
+                            <hr class="dropdown-divider">
+                            <form th:action="@{/logout}" method="post">
+                                <input class="signOut-button" type="submit" th:value="#{header.sign_out}"/>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+                <a sec:authorize="!hasAuthority('ADMIN')" th:object="${#httpSession.getAttribute('cart')}"
+                   th:href="@{/cart}" type="button" class="btn btn-success">
+<!--                    <img th:replace="fragments/icons_svg :: cart_btn" alt="Cart">-->
+                    <svg th:replace="fragments/icons_svg :: cart_btn"/>
                     [[#{header.cart}]]
+                    <span id="navbarNotificationCounter" class="badge rounded-pill badge-notification bg-danger"
+                          style="color: rgb(255, 255, 255) !important;"
+                          th:unless="${#object} == null or ${#object.isEmpty()}" th:text="${#object.sizeValues()}"/>
                 </a>
 
-                <div class="dropdown ms-5">
+                <div class="dropdown">
                     <a class="d-block link-light text-decoration-none dropdown-toggle" role="button"
                        data-bs-toggle="dropdown"
                        aria-expanded="false">
-                        <img src="/img/icons/translate.svg" width="24" height="24" alt="Language">
+<!--                        <img src="/img/icons/translate.svg" width="24" height="24" alt="Language">-->
+                        <svg th:insert="fragments/icons_svg :: translate_btn" width="24" height="24"/>
                     </a>
                     <div class="dropdown-menu text-small shadow" style="">
                         <a class="dropdown-item" href="?lang=en">
-                            <img src="/img/icons/gb.svg" width="24" height="24" alt="GB-Flag"> [[#{lang.en}]]
+                            <svg th:insert="fragments/icons_svg :: flag_gb" width="24" height="24"/>
+                            <!--                            <img src="/img/icons/gb.svg" width="24" height="24" alt="GB-Flag">-->
+                             [[#{lang.en}]]
                         </a>
                         <hr class="dropdown-divider">
                         <a class="dropdown-item" href="?lang=ua">
-                            <img src="/img/icons/ua.svg" width="24" height="24" alt="UA-Flag"> [[#{lang.ua}]]
+                            <svg th:insert="fragments/icons_svg :: flag_ua" width="24" height="24"/>
+                            <!--                            <img src="/img/icons/ua.svg" width="24" height="24" alt="UA-Flag">-->
+                             [[#{lang.ua}]]
                         </a>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-    <div class="px-3 py-2 border-bottom mb-3">
-        <div class="container-fluid d-flex flex-wrap justify-content-center">
-            <form class="col-12 col-lg-auto mb-2 mb-lg-0 me-lg-auto d-flex" role="search">
-                <input type="search" class="form-control me-2" th:placeholder="#{header.search.inline}"
-                       aria-label="Search">
-                <button class="btn btn-outline-success" type="submit">
-                    [[#{header.search}]]
-                </button>
-            </form>
 
-            <!-- Authentication -->
-            <div sec:authorize="isAnonymous()" class="text-end">
-                <a th:href="@{/auth/login}" type="button" class="btn btn-light text-dark me-2">
-                    [[#{header.login}]]
-                </a>
-                <a th:href="@{/auth/registration}" type="button" class="btn btn-primary me-4">
-                    [[#{header.sing_up}]]
-                </a>
-            </div>
-            <!--            <div sec:authorize="isAuthenticated()" class="flex-shrink-0 dropdown">-->
-            <div class="flex-shrink-0 dropdown">
-                <a href="#" class="d-block link-dark text-decoration-none dropdown-toggle" data-bs-toggle="dropdown"
-                   aria-expanded="false">
-                    <span class="user-name" sec:authentication="name"></span>
-                    <svg th:replace="fragments/buttons/buttons_svg :: user_btn" width="32" height="32"></svg>
-                </a>
-                <div class="dropdown-menu text-small shadow" style="">
-                    <a class="dropdown-item" th:href="@{/greeting}">
-                        [[#{header.profile}]]
-                    </a>
-                    <hr class="dropdown-divider">
-                    <form th:action="@{/logout}" method="post">
-                        <input class="signOut-button" type="submit" th:value="#{header.sign_out}"/>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </div>
+    <!--    <div class="px-3 py-2 border-bottom mb-3">-->
+    <!--        <div class="container-fluid d-flex flex-wrap justify-content-center">-->
+    <!--            &lt;!&ndash; Authentication &ndash;&gt;-->
+    <!--            <div sec:authorize="isAnonymous()" class="text-end">-->
+    <!--                <a th:href="@{/auth/login}" type="button" class="btn btn-light text-dark me-2">-->
+    <!--                    [[#{header.login}]]-->
+    <!--                </a>-->
+    <!--                <a th:href="@{/auth/registration}" type="button" class="btn btn-primary me-4">-->
+    <!--                    [[#{header.sing_up}]]-->
+    <!--                </a>-->
+    <!--            </div>-->
+    <!--            &lt;!&ndash;            <div sec:authorize="isAuthenticated()" class="flex-shrink-0 dropdown">&ndash;&gt;-->
+    <!--            <div class="flex-shrink-0 dropdown">-->
+    <!--                <a href="#" class="d-block link-dark text-decoration-none dropdown-toggle" data-bs-toggle="dropdown"-->
+    <!--                   aria-expanded="false">-->
+    <!--                    <span class="user-name" sec:authentication="name"></span>-->
+    <!--                    <svg th:replace="fragments/buttons/buttons_svg :: user_btn" width="32" height="32"></svg>-->
+    <!--                </a>-->
+    <!--                <div class="dropdown-menu text-small shadow" style="">-->
+    <!--                    <a class="dropdown-item" th:href="@{/greeting}">-->
+    <!--                        [[#{header.profile}]]-->
+    <!--                    </a>-->
+    <!--                    <hr class="dropdown-divider">-->
+    <!--                    <form th:action="@{/logout}" method="post">-->
+    <!--                        <input class="signOut-button" type="submit" th:value="#{header.sign_out}"/>-->
+    <!--                    </form>-->
+    <!--                </div>-->
+    <!--            </div>-->
+    <!--        </div>-->
+    <!--    </div>-->
 </header>
 
 <!--<header th:fragment="header_bar">-->

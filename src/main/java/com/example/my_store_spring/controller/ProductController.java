@@ -1,7 +1,6 @@
 package com.example.my_store_spring.controller;
 
-import com.example.my_store_spring.dto.ProductDto;
-import com.example.my_store_spring.model.enums.StockStatus;
+import com.example.my_store_spring.dto.*;
 import com.example.my_store_spring.services.ProductService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -12,106 +11,129 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import java.io.FileInputStream;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
+import javax.persistence.EntityNotFoundException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+import java.io.IOException;
 import java.util.List;
-import java.util.Properties;
+import java.util.Objects;
 
-import static com.example.my_store_spring.model.enums.StockStatus.ON_STOCK;
 
 @Controller
-@RequestMapping("/product")
+@RequestMapping("/products")
 @RequiredArgsConstructor
 @Slf4j
 public class ProductController {
 
     private final ProductService productService;
+    private final Cart cart;
 
     @GetMapping
-    public String getAll(Model model, @RequestParam(defaultValue = "dateAdded") String sort,
-                         @RequestParam(defaultValue = "1") int page, @RequestParam(defaultValue = "10") int size) {
-        Pageable pageable = PageRequest.of(page - 1, size, Sort.by(sort));
+    public String getAll(@RequestParam(defaultValue = "dateAdded") String sort,
+                         @RequestParam(defaultValue = "1") int page,
+                         @RequestParam(defaultValue = "10") int size,
+                         @RequestParam(defaultValue = "true") boolean desc,Model model) {
+        Sort sorting = desc ? Sort.by(sort).descending() : Sort.by(sort).ascending();
+        Pageable pageable = PageRequest.of(page - 1, size, sorting);
         Page<ProductDto> productDtoPage = productService.findAll(pageable);
 
         List<ProductDto> productDtoList = productDtoPage.toList();
         long totalItems = productDtoPage.getTotalElements();
         int totalPages = productDtoPage.getTotalPages();
 
+        log.info("Products were send");
+
         model.addAttribute("allProducts", productDtoList);
         model.addAttribute("currentPage", page);
         model.addAttribute("totalItems", totalItems);
         model.addAttribute("totalPages", totalPages);
         model.addAttribute("pageSize", size);
-        return "product";
+        return "products";
     }
 
-
-//    @GetMapping
-//    public String getAllProducts(Model model) {
-//        log.info("products page");
-//        List<ProductDto> products = productService.findAllProducts();
-//        model.addAttribute("products", products);
-//        return "product/products";
-//    }
+    @PostMapping
+    public String addToCart(@RequestParam Integer id, HttpServletRequest request, Model model) {
+        log.info("Adding to cart");
+        ProductDto productDto = productService.findById(id);
+        cart.put(productDto, 1);
+        HttpSession session = request.getSession();
+        session.setAttribute("cart", cart);
+        model.addAttribute("cart", cart);
+        return "redirect:/products";
+    }
 
     @GetMapping("addProduct")
-    public String addProduct() {
+    public String addProduct(Model model) {
         log.info("product add page");
-        return "product/addProduct";
+        List<CategoryDto> allCategories = productService.findAllCategories();
+        List<StockStatusDto> allStatuses = productService.findAllStockStatuses();
+        model.addAttribute("categories", allCategories);
+        model.addAttribute("statuses", allStatuses);
+        model.addAttribute("categoryDto", new CategoryDto());
+        model.addAttribute("stockStatusDto", new StockStatusDto());
+        model.addAttribute("productDetailsDto", new ProductDetailsDto());
+        model.addAttribute("productDto", new ProductDto());
+        log.info("");
+        return "addProduct";
     }
 
     @PostMapping("addProduct")
-    public String addProduct(@RequestParam String productName,
-                             @RequestParam(defaultValue = "0") String cost,
-                             @RequestParam String measure, Model model) {
+    public String addProduct(
+            RedirectAttributes redirectAttributes,
+            @ModelAttribute CategoryDto categoryDto,
+            @ModelAttribute StockStatusDto stockStatusDto,
+            @ModelAttribute ProductDetailsDto productDetailsDto,
+            @ModelAttribute ProductDto productDto,
+            @RequestParam MultipartFile file) {
         log.info("product add post page");
-        String msg;
-        if (productName.equals("") || measure.equals("")) {
-            msg = "All fields must be filled";
-        } else if (productService.isProductExists(productName)) {
-            msg = "Product exists!";
+
+        String message;
+        String productDtoModel = productDto.getModel();
+        if (categoryDto.getCategoryId() == null || stockStatusDto.getStatusId() == null) {
+            message = "select";
+        } else if (productDtoModel.equals("")) {
+            message = "model";
+        } else if (productService.isProductExists(productDtoModel)) {
+            message = "exists";
+        } else if (productDetailsDto.getName().equals("")) {
+            message = "details";
+        } else if (file.isEmpty() || !Objects.requireNonNull(file.getContentType()).contains("image")) {
+            message = "file";
         } else {
-            ProductDto productDto =
-                    new ProductDto(null, LocalDate.now(), productName, measure, Double.parseDouble(cost), ON_STOCK);
-            productService.addProduct(productDto);
-            msg = "Product added successfully!";
-            model.addAttribute("productDto", productDto);
+            try {
+                productDto = productService.addProduct(categoryDto, stockStatusDto, productDetailsDto, productDto, file);
+                redirectAttributes.addFlashAttribute("newProductDto", productDto);
+                message = "added";
+            } catch (IOException e) {
+                e.printStackTrace();
+                message = "exception";
+            }
         }
-        model.addAttribute("message", msg);
-        return "product/addProduct";
+        redirectAttributes.addFlashAttribute("message", message);
+        log.info("");
+        return "redirect:/products/addProduct";
     }
 
-//    @PostMapping
-//    public String findOrDeleteProduct(@RequestParam String action, Model model,
-//                                      @RequestParam(required = false) List<Integer> productId) {
-//        log.info("product post page");
-//        if (productId == null) {
-//            model.addAttribute("message", "Please check product first");
-//            return getAllProducts(model);
-//        }
-//
-//        if (action.equals("delete")) {
-//            log.info("\"DELETE\" CALLED");
-//            return deleteProduct(model, productId);
-//        }
-//
-//        log.info("\"FIND\" CALLED");
-//        boolean isDeleted = false;
-//        List<ProductDto> productDtoList = productService.findAllById(productId);
-//        model.addAttribute("productList", productDtoList);
-//        model.addAttribute("deleted", isDeleted);
-//        return "product/product";
-//    }
-//
-//    @DeleteMapping
-//    public String deleteProduct(Model model, @RequestParam List<Integer> productId) {
-//        log.info("product delete page");
-//        List<ProductDto> productDtoList = productService.deleteAllById(productId);
-//        boolean isDeleted = true;
-//        model.addAttribute("productList", productDtoList);
-//        model.addAttribute("deleted", isDeleted);
-//        return "product/product";
-//    }
+    @PostMapping("remove")
+    public String removeProduct(RedirectAttributes redirectAttributes, @RequestParam Integer id) {
+        log.info("product remove page");
+        String removeMsg;
+        try {
+            ProductDto productDto = productService.deleteById(id);
+            if (productDto != null) {
+                removeMsg = "removed";
+                redirectAttributes.addFlashAttribute("model", productDto.getModel());
+            } else {
+                removeMsg = "not_found";
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+            removeMsg = "exception";
+        }
+        redirectAttributes.addFlashAttribute("removeMsg", removeMsg);
+        return "redirect:/products";
+    }
 }

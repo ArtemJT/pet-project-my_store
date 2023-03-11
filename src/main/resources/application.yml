@@ -1,16 +1,24 @@
-#Heroku JawsDB:
 spring:
   datasource:
+    #Heroku JawsDB:
     url: jdbc:mysql://aewqksq4uu522fqc:tim5ha4rws3dztiy@ulsq0qqx999wqz84.chr7pe7iynqr.eu-west-1.rds.amazonaws.com:3306/mjicx0btdgs4w3fi
     username: aewqksq4uu522fqc
     password: tim5ha4rws3dztiy
+#    url: jdbc:mysql://localhost:3306/testDB
+#    username: testDB
+#    password: testDB
   jpa:
     properties:
       hibernate.default_schema: mjicx0btdgs4w3fi
+#      hibernate.default_schema: testDB
     show-sql: true
 
 server:
   port: ${PORT:8080}
+
+upload:
+  path: src/main/resources/static/img/catalog/uploaded/
+
 
 #server:
 #  servlet:

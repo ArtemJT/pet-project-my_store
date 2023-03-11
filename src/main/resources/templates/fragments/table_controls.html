@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<body>
+<!--<div th:fragment="table_controls" class="container row mt-3 justify-content-start align-items-center">-->
+<div th:fragment="table_controls" class="container mt-3">
+    <div class="row justify-content-around">
+<!--    <div class="justify-content-around">-->
+        <div class="col-4">
+<!--            <div class="row justify-content-center">-->
+<!--                <div class="col">-->
+                    <div class="btn-group dropend me-5">
+                        <button class="btn btn-dark dropdown-toggle" type="button" data-bs-toggle="dropdown"
+                                aria-expanded="false">[[${pageSize}]]
+                        </button>
+                        <div class="dropdown-menu text-small shadow">
+                            <a class="dropdown-item" href="?size=5">5</a>
+                            <a class="dropdown-item" href="?size=10">10</a>
+                            <a class="dropdown-item" href="?size=15">15</a>
+                            <a class="dropdown-item" href="?size=20">20</a>
+                        </div>
+                    </div>
+<!--                </div>-->
+<!--                <div class="col">-->
+                    <div class="btn-group dropend mx-5">
+                        <button class="btn btn-dark dropdown-toggle" type="button" data-bs-toggle="dropdown"
+                                aria-expanded="false">[[#{product.sorting}]]
+                        </button>
+                        <div class="dropdown-menu text-small shadow">
+                            <a class="dropdown-item" href="?sort=dateAdded">[[#{product.sorting.date_desc}]]</a>
+                            <a class="dropdown-item" href="?sort=dateAdded&desc=false">[[#{product.sorting.date_asc}]]</a>
+                            <a class="dropdown-item" href="?sort=model&desc=false">[[#{product.sorting.model_asc}]]</a>
+                            <a class="dropdown-item" href="?sort=model">[[#{product.sorting.model_desc}]]</a>
+                            <a class="dropdown-item" href="?sort=price&desc=false">[[#{product.sorting.price_asc}]]</a>
+                            <a class="dropdown-item" href="?sort=price">[[#{product.sorting.price_desc}]]</a>
+                        </div>
+                    </div>
+                </div>
+<!--            </div>-->
+<!--        </div>-->
+
+<!--        <div class="col">-->
+        <div class="col-5">
+            <nav class="pagination-control mx-4" aria-label="Pagination" th:if="${totalPages > 0}">
+                <ul class="pagination justify-content-center">
+                    <li class="page-item" th:classappend="${currentPage == 1} ? 'disabled'">
+                        <a th:replace="fragments/paging :: paging(1, '<<', 'First Page')"></a>
+                    </li>
+                    <li class="page-item" th:classappend="${currentPage == 1} ? 'disabled'">
+                        <a th:replace="fragments/paging :: paging(${currentPage - 1}, #{product.table.prev}, 'Previous Page')"></a>
+                    </li>
+                    <li class="page-item disabled" th:if="${currentPage - 2 > 1}">
+                        <a class="page-link" href="#">...</a>
+                    </li>
+                    <li class="page-item" th:classappend="${page == currentPage} ? 'active'"
+                        th:each="page : ${#numbers.sequence((currentPage > 2 ? currentPage - 2 : 1), (currentPage + 2 < totalPages ? currentPage + 2 : totalPages))}">
+                        <a th:replace="fragments/paging :: paging(${page}, ${page}, 'Page ' + ${page})"></a>
+                    </li>
+                    <li class="page-item disabled" th:if="${currentPage + 2 < totalPages}">
+                        <a class="page-link" href="#">...</a>
+                    </li>
+                    <li class="page-item font-weight-bold"
+                        th:classappend="${currentPage == totalPages} ? 'disabled'">
+                        <a th:replace="fragments/paging :: paging(${currentPage + 1}, #{product.table.next}, 'Next Page')"></a>
+                    </li>
+                    <li class="page-item" th:classappend="${currentPage == totalPages} ? 'disabled'">
+                        <a th:replace="fragments/paging :: paging(${totalPages}, '>>', 'Last Page')"></a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+        <div class="col-2">
+            <div class="btn ms-4" sec:authorize="hasAuthority('ADMIN')">
+                <a class="href_button" th:href="@{/products/addProduct}" th:text="#{product.add}"/>
+            </div>
+        </div>
+
+
+        <!--        <div class="col">-->
+        <!--            <form role="search">-->
+        <!--                <div class="row justify-content-center">-->
+        <!--                    <div class="col-6">-->
+        <!--                        <input type="search" class="form-control" th:placeholder="#{search.inline}" aria-label="Search">-->
+        <!--                    </div>-->
+        <!--                    <div class="col-2">-->
+        <!--                        <button class="btn btn-outline-success" type="submit">[[#{search}]]</button>-->
+        <!--                    </div>-->
+        <!--                </div>-->
+        <!--            </form>-->
+        <!--        </div>-->
+    </div>
+</div>
+
+</body>
+</html>

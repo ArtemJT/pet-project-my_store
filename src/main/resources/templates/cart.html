@@ -1,0 +1,132 @@
+<!DOCTYPE HTML>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security" xmlns="http://www.w3.org/1999/html">
+<head th:replace="fragments/common :: common_header(~{::title}, _)">
+    <title th:text="#{cart.title}"/>
+</head>
+<header th:replace="fragments/header :: header_bar"></header>
+<body>
+
+<!--<div th:insert="fragments/message :: message"></div>-->
+
+<section class="h-100" style="background-color: #eee;">
+    <div class="container h-100 py-5">
+        <div class="row d-flex justify-content-center align-items-center h-100">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h3 class="fw-normal mb-0 text-black">[[#{cart.caption}]]</h3>
+                <!--                    <div th:if="${cart} != null">-->
+                <!--                        <p class="mb-0"><span class="text-muted">[[#{cart.sorting}]]</span> <a href="#!"-->
+                <!--                                                                                               class="text-body">[[#{cart.sorting.price}]]<i-->
+                <!--                                class="fas fa-angle-down mt-1"></i></a></p>-->
+                <!--                    </div>-->
+            </div>
+
+            <div th:if="${cart} == null or ${cart.isEmpty()}" class="col-11">
+                <div class="card rounded-3 mb-4">
+                    <div class="d-flex justify-content-center align-items-center mb-4">
+                        <h3 class="fw-normal mb-0 text-black">[[#{cart.empty}]]</h3>
+                    </div>
+                </div>
+            </div>
+
+            <div th:unless="${cart} == null or ${cart.isEmpty()}" class="col-12">
+
+                <div th:each="item : ${cart}" class="card rounded-3 mb-4">
+                    <div class="card-body p-4">
+
+                        <div class="row d-flex justify-content-between align-items-center">
+                            <div class="col-md-2 col-lg-2 col-xl-2">
+                                <img th:src="${item.key.image}"
+                                     class="img-fluid rounded-3" alt="Image">
+                            </div>
+                            <div class="col-md-4 col-lg-4 col-xl-4">
+                                <!--                                <p class="lead fw-normal mb-2">Basic T-shirt</p>-->
+                                <p class="lead fw-normal mb-2" th:text="${item.key.productDetailsDto.name}"/>
+                                <p><span class="text-muted">[[#{cart.model}]]: </span>[[${item.key.model}]]</p>
+                            </div>
+<!--                            <div class="col-md-3 col-lg-3 col-xl-2">-->
+<!--                                <p><span class="text-muted">[[#{cart.quantity}]]:</span></p>-->
+<!--                                <button class="btn btn-link px-2"-->
+<!--                                        onclick="this.parentNode.querySelector('input[type=number]').stepDown()">-->
+<!--                                    <i class="fas fa-minus"></i>-->
+<!--                                </button>-->
+
+<!--                                <input id="form" min="0" name="quantity" th:value="${item.value}" type="number"-->
+<!--                                       class="form-control form-control-sm"/>-->
+
+<!--                                <button class="btn btn-link px-2"-->
+<!--                                        onclick="this.parentNode.querySelector('input[type=number]').stepUp()">-->
+<!--                                    <i class="fas fa-plus"></i>-->
+<!--                                </button>-->
+<!--                            </div>-->
+                            <div class="col-md-2 col-lg-2 col-xl-2 offset-lg-1">
+                                <p><span class="text-muted">[[#{cart.quantity}]]: </span>[[${item.value}]]</p>
+                                <p><span class="text-muted">[[#{cart.measure}]]: </span>[[${item.key.categoryDto.measure}]]
+                                </p>
+                                <h5 class="mb-0"><span class="text-muted">Cost: </span>$[[${item.value} * ${item.key.price}]]</h5>
+                            </div>
+                            <div class="col-md-1 col-lg-1 col-xl-1 text-end">
+                                <!--                                <form th:action="@{/cart(id=${item.key.productId})}" th:method="post">-->
+                                <form th:action="@{/cart}" th:method="post">
+                                    <!--                                    <input type="text" name="product" th:value="${item.key}"-->
+                                    <!--                                           class="form-control form-control-lg"/>-->
+                                    <button type="submit" name="id" th:value="${item.key.productId}">
+<!--                                        <img src="/img/icons/trash.svg" alt="Delete"/>-->
+                                        <svg th:replace="fragments/icons_svg :: delete_btn"/>
+                                    </button>
+                                </form>
+                                <!--                                <a href="#" class="text-danger">-->
+                                <!--                                    <i class="fas fa-trash fa-lg"></i>-->
+                                <!--                                </a>-->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!--                <div class="card mb-4">-->
+                <!--                    <div class="card-body p-4 d-flex flex-row">-->
+                <!--                        <div class="form-outline flex-fill">-->
+                <!--                            <input type="text" id="form4" class="form-control form-control-lg" />-->
+                <!--                            <label class="form-label" for="form1">Discound code</label>-->
+                <!--                        </div>-->
+                <!--                        <button type="button" class="btn btn-outline-warning btn-lg ms-3">Apply</button>-->
+                <!--                    </div>-->
+                <!--                </div>-->
+
+                <div class="card">
+                    <div class="card-body d-flex justify-content-around align-items-center">
+                        <form th:action="@{/cart/clear}" th:method="post">
+                            <button type="submit" class="btn btn-secondary btn-block btn-lg">
+                                [[#{cart.button.clear}]]
+                            </button>
+                        </form>
+
+                        <h4 class="mb-0">TOTAL: $[[${cart.totalAmount()}]]</h4>
+
+                        <p sec:authorize="isAnonymous()">
+                            <a th:href="@{/auth/registration}" th:text="#{cart.message.reg}"/>
+                             [[#{cart.message.or}]]
+                            <a th:href="@{/auth/login}" th:text="#{cart.message.sign}"/>
+                            [[#{cart.message}]]
+                        </p>
+
+                        <form sec:authorize="isAuthenticated()" th:action="@{/orders}" th:method="post">
+                            <button type="submit" class="btn btn-warning btn-block btn-lg">
+                                [[#{cart.button.checkout}]]
+                            </button>
+                        </form>
+<!--                        <a sec:authorize="isAuthenticated()" type="button" class="btn btn-warning btn-block btn-lg"-->
+<!--                           th:href="@{}">[[#{cart.button.checkout}]]</a>-->
+                        <!--                        <a type="button" class="btn btn-secondary btn-block btn-lg" th:method="post" th:action="@{/cart}">[[#{cart.button.clear}]]</a>-->
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</section>
+
+</body>
+<footer th:replace="fragments/footer :: footer_bar"></footer>
+
+</html>

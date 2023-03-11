@@ -1,13 +1,12 @@
 package com.example.my_store_spring.model;
 
-import com.example.my_store_spring.model.enums.StockStatus;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 
 @NoArgsConstructor
 @Getter
@@ -20,17 +19,26 @@ public class Product {
     private Integer productId;
 
     @Column
-    private LocalDate dateAdded;
-
-    @Column
     private String model;
 
     @Column
-    private String measure;
+    private BigDecimal price;
 
     @Column
-    private double price;
+    private LocalDate dateAdded;
 
-    @Enumerated(EnumType.STRING)
+    @Column
+    private String image;
+
+    @OneToOne(cascade = CascadeType.DETACH)
+    @JoinColumn(name = "fk_stock_status_id", referencedColumnName = "id")
     private StockStatus stockStatus;
+
+    @OneToOne(cascade = CascadeType.DETACH)
+    @JoinColumn(name = "fk_category_id", referencedColumnName = "id")
+    private Category category;
+
+    @OneToOne(mappedBy = "product")
+    @PrimaryKeyJoinColumn
+    private ProductDetails productDetails;
 }
