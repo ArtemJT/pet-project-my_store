@@ -1,16 +1,23 @@
-spring:
-  datasource:
-    #Heroku JawsDB:
-    url: jdbc:mysql://aewqksq4uu522fqc:tim5ha4rws3dztiy@ulsq0qqx999wqz84.chr7pe7iynqr.eu-west-1.rds.amazonaws.com:3306/mjicx0btdgs4w3fi
-    username: aewqksq4uu522fqc
-    password: tim5ha4rws3dztiy
+##Local TestDB:
+#spring:
+#  datasource:
 #    url: jdbc:mysql://localhost:3306/testDB
 #    username: testDB
 #    password: testDB
+#  jpa:
+#    properties:
+#      hibernate.default_schema: testDB
+#    show-sql: true
+
+#Heroku JawsDB:
+spring:
+  datasource:
+    url: jdbc:mysql://aewqksq4uu522fqc:tim5ha4rws3dztiy@ulsq0qqx999wqz84.chr7pe7iynqr.eu-west-1.rds.amazonaws.com:3306/mjicx0btdgs4w3fi
+    username: aewqksq4uu522fqc
+    password: tim5ha4rws3dztiy
   jpa:
     properties:
-      hibernate.default_schema: mjicx0btdgs4w3fi
-#      hibernate.default_schema: testDB
+            hibernate.default_schema: mjicx0btdgs4w3fi
     show-sql: true
 
 server:
@@ -18,21 +25,3 @@ server:
 
 upload:
   path: src/main/resources/static/img/catalog/uploaded/
-
-
-#server:
-#  servlet:
-#    session:
-#      timeout: 30m
-
-#Postgres local db:
-#spring.datasource.url=jdbc:postgresql://localhost:5432/myStoreDB
-#spring.datasource.username=myStoreDB
-#spring.datasource.password=myStoreDB
-
-#spring.jpa.properties.hibernate.default_schema=my_store_db
-#Heroku ClearDB:
-#spring.datasource.url=jdbc:mysql://eu-cdbr-west-03.cleardb.net:3306/heroku_10bd8c4d6a67e46
-#spring.datasource.username=b380efca398e56
-#spring.datasource.password=ec246ed1
-#spring.jpa.properties.hibernate.default_schema=heroku_10bd8c4d6a67e46

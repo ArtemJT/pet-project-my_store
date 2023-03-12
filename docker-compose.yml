@@ -1,0 +1,23 @@
+version: '3.3'
+
+services:
+  postgres_myStoreDB:
+    image: postgres:14.6
+    restart: always
+    environment:
+      POSTGRES_DB: myStoreDB
+      POSTGRES_PASSWORD: myStoreDB
+      POSTGRES_USER: myStoreDB
+    ports:
+      - "5432:5432"
+
+  mysql_testDB:
+    image: mysql:8.0.32
+    restart: always
+    environment:
+      MYSQL_DATABASE: testDB
+      MYSQL_USER: testDB
+      MYSQL_PASSWORD: testDB
+      MYSQL_ROOT_PASSWORD: testDB
+    ports:
+      - "3306:3306"
