@@ -58,7 +58,7 @@ public class ProductService {
         ProductDto productDto = null;
         if (isProductExists(id)) {
             productDto = findById(id);
-            String imagePathString = "src/main/resources/static" + productDto.getImage();
+            String imagePathString = "static/" + productDto.getImage();
             productRepository.removeProductById(id);
             Files.deleteIfExists(Path.of(imagePathString));
             log.info("");
@@ -104,7 +104,7 @@ public class ProductService {
         }
         Files.copy(file.getInputStream(), path, StandardCopyOption.REPLACE_EXISTING);
         String pathString = path.toString();
-        int indexOf = path.toString().indexOf("\\img");
+        int indexOf = path.toString().indexOf("img\\");
         log.info("");
         return pathString.substring(indexOf);
     }
