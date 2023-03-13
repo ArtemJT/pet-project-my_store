@@ -1,9 +1,8 @@
 package com.example.my_store_spring.dto;
 
-import com.example.my_store_spring.model.Product;
-import lombok.*;
-
-import javax.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
 @NoArgsConstructor

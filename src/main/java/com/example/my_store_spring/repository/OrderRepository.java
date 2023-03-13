@@ -1,7 +1,6 @@
 package com.example.my_store_spring.repository;
 
 import com.example.my_store_spring.model.Order;
-import com.example.my_store_spring.model.Users;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.PagingAndSortingRepository;

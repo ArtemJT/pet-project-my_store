@@ -29,6 +29,7 @@
                             </tr>
                             </thead>
                             <tbody>
+                            <!--/*@thymesVar id="customer" type="com.example.my_store_spring.dto.UsersDto"*/-->
                             <tr th:each="customer, stat : ${customers}">
                                 <td th:text="${stat.count}"/>
                                 <td th:text="${customer.name}"/>
@@ -39,11 +40,6 @@
                                     <a th:href="@{/customers/orders(name=${customer.name})}"
                                        class="btn btn-link btn-rounded btn-sm fw-bold"
                                        th:text="${customer.orderDtoList.size()}"></a>
-                                    <!--                                    <form th:action="@{/customers/orders}" th:method="get">-->
-                                    <!--                                        <button type="submit" class="btn btn-link btn-rounded btn-sm fw-bold"-->
-                                    <!--                                                th:name="name" th:value="${customer.name}" th:text="${customer.orderDtoList.size()}">-->
-                                    <!--                                        </button>-->
-                                    <!--                                    </form>-->
                                 </td>
                                 <td>
                                     <form th:action="@{/customers}" th:method="post">

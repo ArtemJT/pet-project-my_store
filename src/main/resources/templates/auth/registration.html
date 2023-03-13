@@ -54,12 +54,13 @@
                                     <input class="form-check-input me-2" type="checkbox" name="termsAgree" value=""
                                            id="form2Example3"/>
                                     <label class="form-check-label" for="form2Example3">
-                                        [[#{reg.agree}]] <a href="#!" th:text="#{reg.terms}"/>
+                                        [[#{reg.agree}]] <a href="#" th:text="#{reg.terms}"/>
                                     </label>
                                 </div>
 
                                 <div class="d-flex justify-content-center mx-4 mb-3 mb-lg-4">
-                                    <button type="submit" class="btn btn-primary btn-lg">[[#{reg.button.register}]]</button>
+                                    <button type="submit" class="btn btn-primary btn-lg"
+                                            th:text="#{reg.button.register}"/>
                                 </div>
 
                             </form>

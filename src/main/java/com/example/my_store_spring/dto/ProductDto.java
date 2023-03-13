@@ -1,12 +1,8 @@
 package com.example.my_store_spring.dto;
 
-import com.example.my_store_spring.model.Category;
-import com.example.my_store_spring.model.ProductDetails;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.SneakyThrows;
+import com.dropbox.core.DbxException;
+import com.dropbox.core.v2.DbxClientV2;
+import lombok.*;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -22,13 +18,24 @@ public class ProductDto {
 
     private BigDecimal price;
 
+    @EqualsAndHashCode.Exclude
     private LocalDate dateAdded;
 
-    private String image;
+    @Setter(AccessLevel.NONE)
+    @EqualsAndHashCode.Exclude
+    private String imageLink;
 
     private StockStatusDto stockStatusDto;
 
     private CategoryDto categoryDto;
 
     private ProductDetailsDto productDetailsDto;
+
+    public void setImageLink(String image, DbxClientV2 dbxClientV2) {
+        try {
+            this.imageLink = dbxClientV2.files().getTemporaryLink(image).getLink();
+        } catch (DbxException e) {
+            e.printStackTrace();
+        }
+    }
 }

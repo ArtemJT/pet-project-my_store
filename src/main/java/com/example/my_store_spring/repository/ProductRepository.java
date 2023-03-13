@@ -12,7 +12,6 @@ import org.springframework.stereotype.Repository;
 public interface ProductRepository extends CrudRepository<Product, Integer>, PagingAndSortingRepository<Product, Integer> {
 
     boolean existsProductByModel(String model);
-    boolean existsProductByProductId(Integer productId);
 
     @Modifying
     @Query("DELETE FROM Product p WHERE p.productId = :id")

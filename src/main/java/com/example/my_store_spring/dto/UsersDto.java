@@ -2,7 +2,6 @@ package com.example.my_store_spring.dto;
 
 import com.example.my_store_spring.enums.UserRole;
 import com.example.my_store_spring.enums.UserStatus;
-import com.example.my_store_spring.model.Order;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

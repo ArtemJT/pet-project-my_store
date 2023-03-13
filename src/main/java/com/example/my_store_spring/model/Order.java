@@ -1,7 +1,6 @@
 package com.example.my_store_spring.model;
 
 import com.example.my_store_spring.enums.OrderStatus;
-import com.example.my_store_spring.enums.UserStatus;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;

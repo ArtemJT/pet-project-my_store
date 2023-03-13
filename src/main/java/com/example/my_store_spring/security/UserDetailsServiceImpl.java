@@ -21,7 +21,6 @@ import java.util.Set;
 public class UserDetailsServiceImpl implements UserDetailsService {
 
     private final UsersRepository usersRepository;
-//    private String blockedUserMsg;
     private boolean isBlocked;
 
     @Override

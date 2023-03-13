@@ -1,5 +1,11 @@
 package com.example.my_store_spring.utilities;
 
+import com.dropbox.core.v2.DbxClientV2;
+import com.example.my_store_spring.dto.CategoryDto;
+import com.example.my_store_spring.dto.ProductDetailsDto;
+import com.example.my_store_spring.dto.ProductDto;
+import com.example.my_store_spring.dto.StockStatusDto;
+import com.example.my_store_spring.model.Product;
 import com.google.common.collect.Streams;
 import lombok.AccessLevel;
 import lombok.NonNull;
@@ -22,8 +28,21 @@ public final class Mapper {
         return modelMapper.map(entity, dtoClass);
     }
 
-    public <E, D> Page<D> mapPageEntityToDto(@NonNull final Page<E> entityPage, Class<D> dtoClass) {
-        return entityPage.map(e -> toDto(e, dtoClass));
+    public ProductDto productToDtoMapper(@NonNull final Product entity, DbxClientV2 dbxClientV2) {
+        ProductDto productDto = new ProductDto();
+        productDto.setProductId(entity.getProductId());
+        productDto.setModel(entity.getModel());
+        productDto.setPrice(entity.getPrice());
+        productDto.setDateAdded(entity.getDateAdded());
+        productDto.setImageLink(entity.getImage(), dbxClientV2);
+        productDto.setStockStatusDto(toDto(entity.getStockStatus(), StockStatusDto.class));
+        productDto.setCategoryDto(toDto(entity.getCategory(), CategoryDto.class));
+        productDto.setProductDetailsDto(toDto(entity.getProductDetails(), ProductDetailsDto.class));
+        return productDto;
+    }
+
+    public Page<ProductDto> mapPageProductToDto(@NonNull final Page<Product> entityPage, DbxClientV2 dbxClientV2) {
+        return entityPage.map(product -> productToDtoMapper(product, dbxClientV2));
     }
 
     public <E, D> List<D> collectToDto(@NonNull final Collection<E> entityCollection, Class<D> dtoClass) {
@@ -40,11 +59,5 @@ public final class Mapper {
 
     public <E, D> E toEntity(@NonNull final D dto, Class<E> entityClass) {
         return modelMapper.map(dto, entityClass);
-    }
-
-    public <E, D> List<E> collectToEntity(@NonNull final Collection<D> dtoCollection, Class<E> entityClass) {
-        return dtoCollection.stream()
-                .map(d -> modelMapper.map(d, entityClass))
-                .collect(Collectors.toList());
     }
 }

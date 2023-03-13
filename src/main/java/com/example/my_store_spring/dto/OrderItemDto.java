@@ -1,10 +1,9 @@
 package com.example.my_store_spring.dto;
 
-import com.example.my_store_spring.model.Order;
-import com.example.my_store_spring.model.Product;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
-import javax.persistence.*;
 import java.math.BigDecimal;
 
 @Data

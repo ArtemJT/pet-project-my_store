@@ -1,5 +1,7 @@
 package com.example.my_store_spring.services;
 
+import com.dropbox.core.DbxException;
+import com.dropbox.core.v2.DbxClientV2;
 import com.example.my_store_spring.dto.CategoryDto;
 import com.example.my_store_spring.dto.ProductDetailsDto;
 import com.example.my_store_spring.dto.ProductDto;
@@ -24,9 +26,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.persistence.EntityNotFoundException;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.StandardCopyOption;
+import java.io.InputStream;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -41,80 +41,74 @@ public class ProductService {
     private final StockStatusRepository stockStatusRepository;
     private final ProductDetailsRepository productDetailsRepository;
     private final Mapper mapper;
+    private final DbxClientV2 dbxClientV2;
 
     @Value("${upload.path}")
     private String uploadPath;
 
     public Page<ProductDto> findAll(Pageable pageable) {
-        return mapper.mapPageEntityToDto(productRepository.findAll(pageable), ProductDto.class);
+        return mapper.mapPageProductToDto(productRepository.findAll(pageable), dbxClientV2);
     }
 
     public ProductDto findById(Integer id) throws EntityNotFoundException {
         Product product = productRepository.findById(id).orElseThrow(EntityNotFoundException::new);
-        return mapper.toDto(product, ProductDto.class);
+        return mapper.productToDtoMapper(product, dbxClientV2);
     }
 
-    public ProductDto deleteById(Integer id) throws EntityNotFoundException, IOException {
+    public ProductDto deleteById(Integer id) throws EntityNotFoundException, IOException, DbxException {
         ProductDto productDto = null;
-        if (isProductExists(id)) {
-            productDto = findById(id);
-            String imagePathString = "static/" + productDto.getImage();
+        Product product = productRepository.findById(id).orElseThrow(EntityNotFoundException::new);
+        if (product != null) {
+            productDto = mapper.productToDtoMapper(product, dbxClientV2);
             productRepository.removeProductById(id);
-            Files.deleteIfExists(Path.of(imagePathString));
+            dbxClientV2.files().deleteV2(product.getImage());
             log.info("");
         }
         return productDto;
     }
 
     public ProductDto addProduct(CategoryDto categoryDto, StockStatusDto stockStatusDto,
-                                 ProductDetailsDto productDetailsDto, ProductDto productDto, MultipartFile file) throws IOException {
-        String newFile;
-        try {
-            newFile = uploadFile(file);
-        } catch (IOException e) {
-            throw new IOException(e.getMessage());
-        }
-        productDto.setImage(newFile);
+                                 ProductDetailsDto productDetailsDto, ProductDto productDto, MultipartFile file) throws IOException, DbxException {
 
         productDto.setDateAdded(LocalDate.now());
 
         Product product = mapper.toEntity(productDto, Product.class);
 
-        productDto.setCategoryDto(setCategoryById(product, categoryDto));
+        categoryDto = setCategoryById(product, categoryDto);
+        productDto.setCategoryDto(categoryDto);
+
+        String newFile;
+        try {
+            newFile = uploadFileToDbx(file, categoryDto);
+        } catch (IOException e) {
+            throw new IOException(e.getMessage());
+        }
+
+        product.setImage(newFile);
+
         productDto.setStockStatusDto(setStockStatusById(product, stockStatusDto));
 
         productRepository.save(product);
 
         productDto.setProductDetailsDto(setProductDetails(product, productDetailsDto));
         productDto.setProductId(product.getProductId());
+        productDto.setImageLink(newFile, dbxClientV2);
         log.info("");
         return productDto;
     }
 
-    public String uploadFile(MultipartFile file) throws IOException {
-        Path uploadDir = Path.of(uploadPath);
-        if (!Files.isDirectory(uploadDir)) {
-            Files.createDirectory(uploadDir);
-            log.info("DIR CREATED: {}", uploadDir.getFileName());
-        }
+    public String uploadFileToDbx(MultipartFile file, CategoryDto categoryDto) throws DbxException, IOException {
+        String categoryName = categoryDto.getName();
         String originalFilename = file.getOriginalFilename();
-        Path path = Path.of(uploadPath + originalFilename);
-        if (Files.exists(path)) {
-            throw new IOException("FILE WITH NAME: \"" + originalFilename + "\" IS EXISTS");
-        }
-        Files.copy(file.getInputStream(), path, StandardCopyOption.REPLACE_EXISTING);
-        String pathString = path.toString();
-        int indexOf = path.toString().indexOf("img\\");
-        log.info("");
-        return pathString.substring(indexOf);
+        String uploadingFilePath = uploadPath + categoryName + '/' + originalFilename;
+
+        InputStream fis = file.getInputStream();
+        dbxClientV2.files().uploadBuilder(uploadingFilePath).uploadAndFinish(fis);
+        return uploadingFilePath;
     }
 
     public boolean isProductExists(String productName) {
         return productRepository.existsProductByModel(productName);
-    }
-
-    public boolean isProductExists(Integer id) {
-        return productRepository.existsProductByProductId(id);
     }
 
     public List<CategoryDto> findAllCategories() {
@@ -123,10 +117,6 @@ public class ProductService {
 
     public List<StockStatusDto> findAllStockStatuses() {
         return mapper.iterableToDto(stockStatusRepository.findAll(), StockStatusDto.class);
-    }
-
-    protected Category findCategoryById(CategoryDto categoryDto) {
-        return categoryRepository.findById(categoryDto.getCategoryId()).orElseThrow(EntityNotFoundException::new);
     }
 
     protected CategoryDto setCategoryById(Product product, CategoryDto categoryDto) throws EntityNotFoundException {

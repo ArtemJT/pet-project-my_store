@@ -1,5 +1,6 @@
 package com.example.my_store_spring.controller;
 
+import com.dropbox.core.DbxException;
 import com.example.my_store_spring.dto.*;
 import com.example.my_store_spring.services.ProductService;
 import lombok.RequiredArgsConstructor;
@@ -14,7 +15,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import javax.persistence.EntityNotFoundException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
@@ -35,7 +35,8 @@ public class ProductController {
     public String getAll(@RequestParam(defaultValue = "dateAdded") String sort,
                          @RequestParam(defaultValue = "1") int page,
                          @RequestParam(defaultValue = "10") int size,
-                         @RequestParam(defaultValue = "true") boolean desc,Model model) {
+                         @RequestParam(defaultValue = "true") boolean desc,
+                         Model model) {
         Sort sorting = desc ? Sort.by(sort).descending() : Sort.by(sort).ascending();
         Pageable pageable = PageRequest.of(page - 1, size, sorting);
         Page<ProductDto> productDtoPage = productService.findAll(pageable);
@@ -50,7 +51,9 @@ public class ProductController {
         model.addAttribute("currentPage", page);
         model.addAttribute("totalItems", totalItems);
         model.addAttribute("totalPages", totalPages);
-        model.addAttribute("pageSize", size);
+        model.addAttribute("size", size);
+        model.addAttribute("sort", sort);
+        model.addAttribute("desc", desc);
         return "products";
     }
 
@@ -107,7 +110,7 @@ public class ProductController {
                 productDto = productService.addProduct(categoryDto, stockStatusDto, productDetailsDto, productDto, file);
                 redirectAttributes.addFlashAttribute("newProductDto", productDto);
                 message = "added";
-            } catch (IOException e) {
+            } catch (IOException | DbxException e) {
                 e.printStackTrace();
                 message = "exception";
             }
@@ -129,7 +132,7 @@ public class ProductController {
             } else {
                 removeMsg = "not_found";
             }
-        } catch (IOException e) {
+        } catch (IOException | DbxException e) {
             e.printStackTrace();
             removeMsg = "exception";
         }

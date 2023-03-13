@@ -53,12 +53,14 @@
                                         <div class="modal-dialog modal-xl">
                                             <div class="modal-content">
                                                 <div class="modal-header">
-                                                    <h6 class="fw-normal mb-0 text-black">[[#{orders.td_date}]]
-                                                        [[${order.dateAdded}]]</h6>
-                                                    <h3 class="fw-bold mb-0 text-black">[[#{orders.td_order}]]
-                                                        [[${order.orderId}]]</h3>
-                                                    <h5 class="fw-bold mb-0 text-black">[[#{orders.td_total}]] $[[${order.amount}]]</h5>
-                                                    <h6 class="fw-bold mb-0 text-black">[[#{customers.orders.table.status}]]: [[${order.status}]]</h6>
+                                                    <h6 class="fw-normal mb-0 text-black"
+                                                        th:text="#{orders.td_date} + ${order.dateAdded}"/>
+                                                    <h3 class="fw-bold mb-0 text-black"
+                                                        th:text="#{orders.td_order} + ${order.orderId}"/>
+                                                    <h5 class="fw-bold mb-0 text-black"
+                                                        th:text="#{orders.td_total} + '$' + ${order.amount}"/>
+                                                    <h6 class="fw-bold mb-0 text-black"
+                                                        th:text="#{customers.orders.table.status} + ': ' + ${order.status}"/>
                                                 </div>
                                                 <div class="modal-body d-flex align-items-center justify-content-center">
                                                     <table class="table table-hover">
@@ -69,23 +71,28 @@
                                                             <th th:text="#{orders.table.name}"/>
                                                             <th th:text="#{orders.table.measure}"/>
                                                             <th th:text="#{orders.table.quantity}"/>
+                                                            <th th:text="#{orders.table.stock}"/>
                                                             <th th:text="#{orders.table.cost}"/>
                                                         </tr>
                                                         </thead>
                                                         <tbody>
+                                                        <!--/*@thymesVar id="item" type="com.example.my_store_spring.dto.OrderItemDto"*/-->
                                                         <tr th:each="item, stat : ${order.orderItemDtoList}">
                                                             <td th:text="${stat.count}"/>
                                                             <td th:text="${item.productDto.model}"/>
                                                             <td th:text="${item.productDto.productDetailsDto.name}"/>
                                                             <td th:text="${item.productDto.categoryDto.measure}"/>
                                                             <td th:text="${item.count}"/>
+                                                            <td th:text="${item.productDto.stockStatusDto.status}"/>
                                                             <td th:text="'$'+${item.cost}"/>
                                                         </tr>
                                                         </tbody>
-                                                    </table>                                                </div>
+                                                    </table>
+                                                </div>
                                                 <div class="modal-footer">
                                                     <button type="button" class="btn btn-secondary"
-                                                            data-bs-dismiss="modal" th:text="#{customers.orders.modal.close}">
+                                                            data-bs-dismiss="modal"
+                                                            th:text="#{customers.orders.modal.close}">
                                                     </button>
                                                 </div>
                                             </div>

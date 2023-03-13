@@ -1,24 +1,24 @@
 package com.example.my_store_spring.dto;
 
-import lombok.*;
-import org.springframework.data.annotation.Transient;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.annotation.SessionScope;
 
-import java.io.Serializable;
 import java.math.BigDecimal;
-import java.math.BigInteger;
-import java.util.*;
+import java.util.AbstractMap;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * @author Artem Kovalov on 25.02.2023
  */
 @Data
+@EqualsAndHashCode(callSuper = false)
 @SessionScope
 @Component
-public class Cart extends AbstractMap<ProductDto, Integer> implements Serializable {
-
-    private static final long serialVersionUID = 1111111L;
+public class Cart extends AbstractMap<ProductDto, Integer> {
 
     private final Map<ProductDto, Integer> cartItems = new HashMap<>();
 
@@ -47,11 +47,11 @@ public class Cart extends AbstractMap<ProductDto, Integer> implements Serializab
         return size;
     }
 
-    public boolean removeByProductId(Integer id) {
+    public void removeByProductId(Integer id) {
         ProductDto productDto = cartItems.keySet().stream().filter(prod -> prod.getProductId().equals(id))
                 .findFirst()
                 .orElseThrow(IllegalArgumentException::new);
-        return remove(productDto) != null;
+        remove(productDto);
     }
 
     @Override

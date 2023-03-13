@@ -10,11 +10,12 @@
 <section class="h-100" style="background-color: #eee;">
     <div class="container h-100 py-5">
         <div class="row d-flex justify-content-center align-items-center h-100">
+            <!--/*@thymesVar id="orders" type="com.example.my_store_spring.dto.Cart"*/-->
             <div class="d-flex justify-content-between align-items-center mb-4">
                 <h3 class="fw-normal mb-0 text-black" th:text="#{orders.caption}"/>
                 <div th:unless="${orders.size()} == 0">
                     <button class="btn btn-outline-dark btn-sm" type="button" data-bs-toggle="dropdown"
-                            aria-expanded="false" th:text="#{orders.sorting}"></button>
+                            aria-expanded="false" th:text="#{orders.sorting}"/>
                     <div class="dropdown-menu text-small shadow">
                         <a class="dropdown-item" href="?desc=true" th:text="#{orders.sorting.date_desc}"/>
                         <a class="dropdown-item" href="?desc=false" th:text="#{orders.sorting.date_asc}"/>
@@ -35,20 +36,20 @@
                         <table class="table">
                             <tr>
                                 <td>
-                                    <h5 class="fw-normal mb-0 text-black">[[#{orders.td_date}]]
-                                    [[${order.dateAdded}]]
-                                    </h5>
+                                    <h5 class="fw-normal mb-0 text-black"
+                                        th:text="#{orders.td_date} + ${order.dateAdded}"/>
                                 </td>
                                 <td colspan="3">
-                                    <h2 class="fw-bold mb-0 text-black">[[#{orders.td_order}]]
-                                    [[${order.orderId}]]
-                                    </h2>
+                                    <h2 class="fw-bold mb-0 text-black"
+                                        th:text="#{orders.td_order} + ${order.orderId}"/>
                                 </td>
                                 <td>
-                                    <h4 class="fw-bold mb-0 text-black">[[#{orders.td_total}]] $[[${order.amount}]]</h4>
+                                    <h4 class="fw-bold mb-0 text-black"
+                                        th:text="#{orders.td_total} + '$' + ${order.amount}"/>
                                 </td>
                                 <td>
-                                    <h5 class="fw-bold mb-0 text-black">[[#{orders.status}]]: [[${order.status}]]</h5>
+                                    <h5 class="fw-bold mb-0 text-black"
+                                        th:text="#{orders.status} + ': ' + ${order.status}"/>
                                 </td>
                             </tr>
                         </table>
@@ -60,16 +61,19 @@
                                 <th th:text="#{orders.table.name}"/>
                                 <th th:text="#{orders.table.measure}"/>
                                 <th th:text="#{orders.table.quantity}"/>
+                                <th th:text="#{orders.table.stock}"/>
                                 <th th:text="#{orders.table.cost}"/>
                             </tr>
                             </thead>
                             <tbody>
+                            <!--/*@thymesVar id="item" type="com.example.my_store_spring.dto.OrderItemDto"*/-->
                             <tr th:each="item, stat : ${order.orderItemDtoList}">
                                 <td th:text="${stat.count}"/>
                                 <td th:text="${item.productDto.model}"/>
                                 <td th:text="${item.productDto.productDetailsDto.name}"/>
                                 <td th:text="${item.productDto.categoryDto.measure}"/>
                                 <td th:text="${item.count}"/>
+                                <td th:text="${item.productDto.stockStatusDto.status}"/>
                                 <td th:text="'$'+${item.cost}"/>
                             </tr>
                             </tbody>

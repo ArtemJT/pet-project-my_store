@@ -24,5 +24,4 @@ server:
   port: ${PORT:8080}
 
 upload:
-  path: static/img/catalog/uploaded/
-#  path: src/main/resources/static/img/catalog/uploaded/
+  path: /img/catalog/uploaded/

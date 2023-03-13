@@ -1,6 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org"
-      xmlns:sec="http://www.thymeleaf.org/extras/spring-security" xmlns="http://www.w3.org/1999/html">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head th:replace="fragments/common :: common_header(~{::title}, _)">
     <title th:text="#{login.title}"/>
 </head>
@@ -22,10 +21,11 @@
                             <form th:action="@{/auth/login}" method="post">
 
                                 <div class="d-flex align-items-center mb-3 pb-1">
-                                    <img src="/img/logo_estar.png" alt="My Store">
+                                    <img src="/logo.png" alt="My Store">
                                 </div>
 
-                                <h5 class="fw-normal mb-3 pb-3" style="letter-spacing: 1px;" th:text="#{login.caption}"/>
+                                <h5 class="fw-normal mb-3 pb-3" style="letter-spacing: 1px;"
+                                    th:text="#{login.caption}"/>
 
                                 <div class="form-outline mb-4">
                                     <input type="text" name="username" id="form2Example17"
@@ -39,11 +39,14 @@
                                     <label class="form-label" for="form2Example27" th:text="#{login.password}"/>
                                 </div>
 
-                                <p style="color: darkred" th:if="${param.error} and ${!isBlocked}" th:text="#{login.invalid}"/>
+                                <!--/*@thymesVar id="isBlocked" type="com.example.my_store_spring.security.UserDetailsServiceImpl"*/-->
+                                <p style="color: darkred" th:if="${param.error} and ${!isBlocked}"
+                                   th:text="#{login.invalid}"/>
                                 <p style="color: red" th:if="${isBlocked}" th:text="#{login.message}"/>
 
                                 <div class="pt-1 mb-4">
-                                    <button class="btn btn-dark btn-lg btn-block" type="submit">[[#{login.button.sign_in}]]</button>
+                                    <button class="btn btn-dark btn-lg btn-block" type="submit"
+                                            th:text="#{login.button.sign_in}"/>
                                 </div>
 
                                 <p class="mb-5 pb-lg-2">
