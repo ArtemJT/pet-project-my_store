@@ -25,3 +25,6 @@ server:
 
 upload:
   path: /img/catalog/uploaded/
+
+dropbox:
+  access-token: sl.BahNmKDxyPRPn23xFu28LVLJtX5qv_U8bcYeXBJpGll6w4LuP8hRy48l-aqPjjPwqE7K7Ljuz5H4hLzdACiZC114__U0h-zAIKrSxu6UdgfdR1hRIjg54_0PaquCbEONneLDMa9t
